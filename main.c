@@ -6,7 +6,7 @@
 // PARTE 1: MODELAGEM DE DADOS (ESCOPO GLOBAL - 4 STRUCTS)
 // ============================================================================
 
-// 1. Perspectiva do Integrante A: Catálogo de Álbuns / CDs
+// 1. Perspectiva do Giovanni: Catálogo de Álbuns / CDs
 struct Album {
     int idAlbum;
     char tituloAlbum[50];
@@ -17,7 +17,7 @@ struct Album {
 struct Album catalogoAlbuns[50];
 int totalAlbuns = 0;
 
-// 2. Perspectiva do Integrante B: Gestão de Músicas / Faixas
+// 2. Perspectiva do Vinicius: Gestão de Músicas / Faixas
 struct Musica {
     int idMusica;
     char nomeMusica[40];
@@ -28,7 +28,7 @@ struct Musica {
 struct Musica listaMusicas[50];
 int totalMusicas = 0;
 
-// 3. Perspectiva do Integrante C: Cadastro de Artistas / Bandas
+// 3. Perspectiva do Alan: Cadastro de Artistas / Bandas
 struct Artista {
     int idArtista;
     char nomeArtista[40];
@@ -39,7 +39,7 @@ struct Artista {
 struct Artista cadastroArtistas[50];
 int totalArtistas = 0;
 
-// 4. Perspectiva do Integrante C (Repetido): Músicas Curtidas e Relatórios
+// 4. Perspectiva do Giovanni: Músicas Curtidas e Relatórios
 struct MusicaCurtida {
     int idCurtida;
     int idMusicaFavorita;
@@ -63,12 +63,12 @@ void exibirCabecalho() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 1: PERSPECTIVA DE ÁLBUNS / CDS
-// Autor: Integrante A (Nome Completo e RGM)
+// Autor: Integrante A (Giovanni)
 // ----------------------------------------------------------------------------
 void moduloAlbuns() {
     int opcaoAlbum;
     do {
-        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Integrante A)] ---\n");
+        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Giovanni)] ---\n");
         printf("1. Cadastrar Novo Álbum\n");
         printf("2. Listar / Buscar Álbuns\n");
         printf("3. Editar Dados do Álbum\n");
@@ -101,12 +101,12 @@ void moduloAlbuns() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 2: PERSPECTIVA DE MÚSICAS / FAIXAS
-// Autor: Integrante B (Nome Completo e RGM)
+// Autor: Integrante B (Vinicius)
 // ----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
     do {
-        printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Integrante B)] ---\n");
+        printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Vinicius)] ---\n");
         printf("1. Cadastrar Nova Música / Faixa\n");
         printf("2. Listar / Buscar Músicas\n");
         printf("3. Alterar Duração ou Número da Faixa\n");
@@ -139,12 +139,12 @@ void moduloMusicas() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 3: PERSPECTIVA DE ARTISTAS / BANDAS
-// Autor: Integrante C (Nome Completo e RGM)
+// Autor: Integrante C (Alan)
 // ----------------------------------------------------------------------------
 void moduloArtistas() {
     int opcaoArtista;
     do {
-        printf("\n--- [MÓDULO 3: CADASTRO DE ARTISTAS (Integrante C)] ---\n");
+        printf("\n--- [MÓDULO 3: CADASTRO DE ARTISTAS (Alan)] ---\n");
         printf("1. Cadastrar Novo Artista / Banda\n");
         printf("2. Consultar / Listar Artistas\n");
         printf("3. Atualizar Dados do Artista\n");
@@ -177,12 +177,12 @@ void moduloArtistas() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 4: PERSPECTIVA DE MÚSICAS CURTIDAS E RELATÓRIOS
-// Autor: Integrante C (Nome Completo e RGM - Módulo Adicional)
+// Autor: Integrante C (Giovanni)
 // ----------------------------------------------------------------------------
 void moduloCurtidasRelatorios() {
     int opcaoCurtida;
     do {
-        printf("\n--- [MÓDULO 4: CURTIDAS E RELATÓRIOS (Integrante C)] ---\n");
+        printf("\n--- [MÓDULO 4: CURTIDAS E RELATÓRIOS (Giovanni)] ---\n");
         printf("1. Registrar Música Curtida / Favorita\n");
         printf("2. Listar Histórico de Curtidas\n");
         printf("3. Atualizar Nota ou Vezes Ouvida\n");
@@ -226,7 +226,6 @@ void moduloCurtidasRelatorios() {
 // PARTE 3: FUNÇÃO PRINCIPAL (MAIN) - DESPACHANTE DE MENUS
 // ============================================================================
 int main() {
-    // Configura o console para aceitar acentos e o 'ç'
     setlocale(LC_ALL, "Portuguese");
 
     int opcaoPrincipal;
