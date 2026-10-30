@@ -21,7 +21,7 @@ int totalAlbuns = 0;
 struct Musica {
     int idMusica;
     char nomeMusica[40];
-    int duracaoMinutos;
+    float duracaoMinutos;
     int idAlbumPertencente;
     int numeroFaixa;
 };
