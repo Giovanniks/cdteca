@@ -233,10 +233,10 @@ int main() {
     do {
         exibirCabecalho();
         printf("SELECIONE A PERSPECTIVA DO SISTEMA:\n");
-        printf("1. Módulo de Álbuns / CDs (Integrante A)\n");
-        printf("2. Módulo de Músicas / Faixas (Integrante B)\n");
-        printf("3. Módulo de Artistas / Bandas (Integrante C)\n");
-        printf("4. Módulo de Curtidas e Relatórios (Integrante C - Extra)\n");
+        printf("1. Módulo de Álbuns / CDs (Giovanni)\n");
+        printf("2. Módulo de Músicas / Faixas (Vinicius)\n");
+        printf("3. Módulo de Artistas / Bandas (Alan)\n");
+        printf("4. Módulo de Curtidas e Relatórios (Giovanni)\n");
         printf("0. Encerrar o Sistema\n");
         printf("------------------------------------------------------\n");
         printf("Digite a opção desejada: ");
