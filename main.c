@@ -6,7 +6,7 @@
 // PARTE 1: MODELAGEM DE DADOS (ESCOPO GLOBAL - 4 STRUCTS)
 // ============================================================================
 
-// 1. Perspectiva do Giovanni: Cat·logo de ¡lbuns / CDs
+// 1. Perspectiva do Giovanni: Cat√°logo de √Ålbuns / CDs
 struct Album {
     int idAlbum;
     char tituloAlbum[50];
@@ -17,11 +17,11 @@ struct Album {
 struct Album catalogoAlbuns[50];
 int totalAlbuns = 0;
 
-// 2. Perspectiva do Vinicius: Gest„o de M˙sicas / Faixas
+// 2. Perspectiva do Vinicius: Gest√£o de M√∫sicas / Faixas
 struct Musica {
     int idMusica;
     char nomeMusica[40];
-    float duracaoMinutos;
+    int duracaoMinutos;
     int idAlbumPertencente;
     int numeroFaixa;
 };
@@ -39,7 +39,7 @@ struct Artista {
 struct Artista cadastroArtistas[50];
 int totalArtistas = 0;
 
-// 4. Perspectiva do Giovanni: M˙sicas Curtidas e RelatÛrios
+// 4. Perspectiva do Giovanni: M√∫sicas Curtidas e Relat√≥rios
 struct MusicaCurtida {
     int idCurtida;
     int idMusicaFavorita;
@@ -51,179 +51,179 @@ int totalCurtidas = 0;
 
 
 // ============================================================================
-// PARTE 2: FUN«’ES DE INTERFACE E M”DULOS DE CADA INTEGRANTE
+// PARTE 2: FUN√á√ïES DE INTERFACE E M√ìDULOS DE CADA INTEGRANTE
 // ============================================================================
 
-// FunÁ„o Visual Comum da Equipe
+// Fun√ß√£o Visual Comum da Equipe
 void exibirCabecalho() {
     printf("\n======================================================\n");
-    printf("         CDTECA PESSOAL - MINHA COLE«√O MUSICAL       \n");
+    printf("         CDTECA PESSOAL - MINHA COLE√á√ÉO MUSICAL       \n");
     printf("======================================================\n");
 }
 
 // ----------------------------------------------------------------------------
-// M”DULO 1: PERSPECTIVA DE ¡LBUNS / CDS
+// M√ìDULO 1: PERSPECTIVA DE √ÅLBUNS / CDS
 // Autor: Integrante A (Giovanni)
 // ----------------------------------------------------------------------------
 void moduloAlbuns() {
     int opcaoAlbum;
     do {
-        printf("\n--- [M”DULO 1: CAT¡LOGO DE ¡LBUNS (Giovanni)] ---\n");
-        printf("1. Cadastrar Novo ¡lbum\n");
-        printf("2. Listar / Buscar ¡lbuns\n");
-        printf("3. Editar Dados do ¡lbum\n");
-        printf("4. Remover ¡lbum\n");
+        printf("\n--- [M√ìDULO 1: CAT√ÅLOGO DE √ÅLBUNS (Giovanni)] ---\n");
+        printf("1. Cadastrar Novo √Ålbum\n");
+        printf("2. Listar / Buscar √Ålbuns\n");
+        printf("3. Editar Dados do √Ålbum\n");
+        printf("4. Remover √Ålbum\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma aÁ„o: ");
+        printf("Escolha uma a√ß√£o: ");
         scanf("%d", &opcaoAlbum);
 
         switch (opcaoAlbum) {
             case 1:
-                printf("\n[Em construÁ„o] Rotina de Cadastro de ¡lbum...\n");
+                printf("\n[Em constru√ß√£o] Rotina de Cadastro de √Ålbum...\n");
                 break;
             case 2:
-                printf("\n[Em construÁ„o] Rotina de Listagem e Busca de ¡lbuns...\n");
+                printf("\n[Em constru√ß√£o] Rotina de Listagem e Busca de √Ålbuns...\n");
                 break;
             case 3:
-                printf("\n[Em construÁ„o] Rotina de EdiÁ„o de ¡lbum...\n");
+                printf("\n[Em constru√ß√£o] Rotina de Edi√ß√£o de √Ålbum...\n");
                 break;
             case 4:
-                printf("\n[Em construÁ„o] Rotina de RemoÁ„o de ¡lbum...\n");
+                printf("\n[Em constru√ß√£o] Rotina de Remo√ß√£o de √Ålbum...\n");
                 break;
             case 0:
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] OpÁ„o inv·lida no MÛdulo de ¡lbuns!\n");
+                printf("\n[ERRO] Op√ß√£o inv√°lida no M√≥dulo de √Ålbuns!\n");
         }
     } while (opcaoAlbum != 0);
 }
 
 // ----------------------------------------------------------------------------
-// M”DULO 2: PERSPECTIVA DE M⁄SICAS / FAIXAS
+// M√ìDULO 2: PERSPECTIVA DE M√öSICAS / FAIXAS
 // Autor: Integrante B (Vinicius)
 // ----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
     do {
-        printf("\n--- [M”DULO 2: GEST√O DE M⁄SICAS (Vinicius)] ---\n");
-        printf("1. Cadastrar Nova M˙sica / Faixa\n");
-        printf("2. Listar / Buscar M˙sicas\n");
-        printf("3. Alterar DuraÁ„o ou N˙mero da Faixa\n");
-        printf("4. Excluir M˙sica\n");
+        printf("\n--- [M√ìDULO 2: GEST√ÉO DE M√öSICAS (Vinicius)] ---\n");
+        printf("1. Cadastrar Nova M√∫sica / Faixa\n");
+        printf("2. Listar / Buscar M√∫sicas\n");
+        printf("3. Alterar Dura√ß√£o ou N√∫mero da Faixa\n");
+        printf("4. Excluir M√∫sica\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma aÁ„o: ");
+        printf("Escolha uma a√ß√£o: ");
         scanf("%d", &opcaoMusica);
 
         switch (opcaoMusica) {
             case 1:
-                printf("\n[Em construÁ„o] Cadastrando Nova M˙sica...\n");
+                printf("\n[Em constru√ß√£o] Cadastrando Nova M√∫sica...\n");
                 break;
             case 2:
-                printf("\n[Em construÁ„o] Listando m˙sicas cadastradas...\n");
+                printf("\n[Em constru√ß√£o] Listando m√∫sicas cadastradas...\n");
                 break;
             case 3:
-                printf("\n[Em construÁ„o] Atualizando dados da m˙sica...\n");
+                printf("\n[Em constru√ß√£o] Atualizando dados da m√∫sica...\n");
                 break;
             case 4:
-                printf("\n[Em construÁ„o] Removendo m˙sica...\n");
+                printf("\n[Em constru√ß√£o] Removendo m√∫sica...\n");
                 break;
             case 0:
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] OpÁ„o inv·lida no MÛdulo de M˙sicas!\n");
+                printf("\n[ERRO] Op√ß√£o inv√°lida no M√≥dulo de M√∫sicas!\n");
         }
     } while (opcaoMusica != 0);
 }
 
 // ----------------------------------------------------------------------------
-// M”DULO 3: PERSPECTIVA DE ARTISTAS / BANDAS
+// M√ìDULO 3: PERSPECTIVA DE ARTISTAS / BANDAS
 // Autor: Integrante C (Alan)
 // ----------------------------------------------------------------------------
 void moduloArtistas() {
     int opcaoArtista;
     do {
-        printf("\n--- [M”DULO 3: CADASTRO DE ARTISTAS (Alan)] ---\n");
+        printf("\n--- [M√ìDULO 3: CADASTRO DE ARTISTAS (Alan)] ---\n");
         printf("1. Cadastrar Novo Artista / Banda\n");
         printf("2. Consultar / Listar Artistas\n");
         printf("3. Atualizar Dados do Artista\n");
         printf("4. Desativar / Remover Artista\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma aÁ„o: ");
+        printf("Escolha uma a√ß√£o: ");
         scanf("%d", &opcaoArtista);
 
         switch (opcaoArtista) {
             case 1:
-                printf("\n[Em construÁ„o] Cadastrando novo artista...\n");
+                printf("\n[Em constru√ß√£o] Cadastrando novo artista...\n");
                 break;
             case 2:
-                printf("\n[Em construÁ„o] Listando artistas...\n");
+                printf("\n[Em constru√ß√£o] Listando artistas...\n");
                 break;
             case 3:
-                printf("\n[Em construÁ„o] Editando dados de artista...\n");
+                printf("\n[Em constru√ß√£o] Editando dados de artista...\n");
                 break;
             case 4:
-                printf("\n[Em construÁ„o] Removendo artista...\n");
+                printf("\n[Em constru√ß√£o] Removendo artista...\n");
                 break;
             case 0:
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] OpÁ„o inv·lida no MÛdulo de Artistas!\n");
+                printf("\n[ERRO] Op√ß√£o inv√°lida no M√≥dulo de Artistas!\n");
         }
     } while (opcaoArtista != 0);
 }
 
 // ----------------------------------------------------------------------------
-// M”DULO 4: PERSPECTIVA DE M⁄SICAS CURTIDAS E RELAT”RIOS
+// M√ìDULO 4: PERSPECTIVA DE M√öSICAS CURTIDAS E RELAT√ìRIOS
 // Autor: Integrante C (Giovanni)
 // ----------------------------------------------------------------------------
 void moduloCurtidasRelatorios() {
     int opcaoCurtida;
     do {
-        printf("\n--- [M”DULO 4: CURTIDAS E RELAT”RIOS (Giovanni)] ---\n");
-        printf("1. Registrar M˙sica Curtida / Favorita\n");
-        printf("2. Listar HistÛrico de Curtidas\n");
+        printf("\n--- [M√ìDULO 4: CURTIDAS E RELAT√ìRIOS (Giovanni)] ---\n");
+        printf("1. Registrar M√∫sica Curtida / Favorita\n");
+        printf("2. Listar Hist√≥rico de Curtidas\n");
         printf("3. Atualizar Nota ou Vezes Ouvida\n");
-        printf("4. [RELAT”RIO] M˙sica Mais Ouvida\n");
-        printf("5. [RELAT”RIO] ¡lbum com Mais M˙sicas Cadastradas\n");
-        printf("6. [RELAT”RIO] M˙sicas com Nota M·xima (5 Estrelas)\n");
+        printf("4. [RELAT√ìRIO] M√∫sica Mais Ouvida\n");
+        printf("5. [RELAT√ìRIO] √Ålbum com Mais M√∫sicas Cadastradas\n");
+        printf("6. [RELAT√ìRIO] M√∫sicas com Nota M√°xima (5 Estrelas)\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma aÁ„o: ");
+        printf("Escolha uma a√ß√£o: ");
         scanf("%d", &opcaoCurtida);
 
         switch (opcaoCurtida) {
             case 1:
-                printf("\n[Em construÁ„o] Registrando m˙sica curtida...\n");
+                printf("\n[Em constru√ß√£o] Registrando m√∫sica curtida...\n");
                 break;
             case 2:
-                printf("\n[Em construÁ„o] Exibindo histÛrico de curtidas...\n");
+                printf("\n[Em constru√ß√£o] Exibindo hist√≥rico de curtidas...\n");
                 break;
             case 3:
-                printf("\n[Em construÁ„o] Atualizando avaliaÁ„o...\n");
+                printf("\n[Em constru√ß√£o] Atualizando avalia√ß√£o...\n");
                 break;
             case 4:
-                printf("\n[Em construÁ„o] Calculando m˙sica mais ouvida...\n");
+                printf("\n[Em constru√ß√£o] Calculando m√∫sica mais ouvida...\n");
                 break;
             case 5:
-                printf("\n[Em construÁ„o] Identificando ·lbum destaque...\n");
+                printf("\n[Em constru√ß√£o] Identificando √°lbum destaque...\n");
                 break;
             case 6:
-                printf("\n[Em construÁ„o] Filtrando m˙sicas 5 estrelas...\n");
+                printf("\n[Em constru√ß√£o] Filtrando m√∫sicas 5 estrelas...\n");
                 break;
             case 0:
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] OpÁ„o inv·lida no MÛdulo de Curtidas e RelatÛrios!\n");
+                printf("\n[ERRO] Op√ß√£o inv√°lida no M√≥dulo de Curtidas e Relat√≥rios!\n");
         }
     } while (opcaoCurtida != 0);
 }
 
 
 // ============================================================================
-// PARTE 3: FUN«√O PRINCIPAL (MAIN) - DESPACHANTE DE MENUS
+// PARTE 3: FUN√á√ÉO PRINCIPAL (MAIN) - DESPACHANTE DE MENUS
 // ============================================================================
 int main() {
     setlocale(LC_ALL, "Portuguese");
@@ -233,13 +233,13 @@ int main() {
     do {
         exibirCabecalho();
         printf("SELECIONE A PERSPECTIVA DO SISTEMA:\n");
-        printf("1. MÛdulo de ¡lbuns / CDs (Integrante A)\n");
-        printf("2. MÛdulo de M˙sicas / Faixas (Integrante B)\n");
-        printf("3. MÛdulo de Artistas / Bandas (Integrante C)\n");
-        printf("4. MÛdulo de Curtidas e RelatÛrios (Integrante C - Extra)\n");
+        printf("1. M√≥dulo de √Ålbuns / CDs (Integrante A)\n");
+        printf("2. M√≥dulo de M√∫sicas / Faixas (Integrante B)\n");
+        printf("3. M√≥dulo de Artistas / Bandas (Integrante C)\n");
+        printf("4. M√≥dulo de Curtidas e Relat√≥rios (Integrante C - Extra)\n");
         printf("0. Encerrar o Sistema\n");
         printf("------------------------------------------------------\n");
-        printf("Digite a opÁ„o desejada: ");
+        printf("Digite a op√ß√£o desejada: ");
         scanf("%d", &opcaoPrincipal);
 
         switch (opcaoPrincipal) {
@@ -256,10 +256,10 @@ int main() {
                 moduloCurtidasRelatorios();
                 break;
             case 0:
-                printf("\nEncerrando o sistema CDteca Pessoal... AtÈ logo!\n");
+                printf("\nEncerrando o sistema CDteca Pessoal... At√© logo!\n");
                 break;
             default:
-                printf("\n[ALERTA] OpÁ„o inv·lida! Digite um n˙mero de 0 a 4.\n");
+                printf("\n[ALERTA] Op√ß√£o inv√°lida! Digite um n√∫mero de 0 a 4.\n");
         }
     } while (opcaoPrincipal != 0);
 
