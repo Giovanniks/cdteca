@@ -139,7 +139,7 @@ void moduloMusicas() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 3: PERSPECTIVA DE ARTISTAS / BANDAS
-// Autor: Integrante C (Alan)
+// Autor: Integrante C Alan (47135221)
 // ----------------------------------------------------------------------------
 void moduloArtistas() {
     int opcaoArtista;
