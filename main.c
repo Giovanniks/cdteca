@@ -63,7 +63,7 @@ void exibirCabecalho() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 1: PERSPECTIVA DE ÁLBUNS / CDS
-// Autor: Integrante A (Giovanni)
+// Autor: Integrante A (Giovanni 48079391)
 // ----------------------------------------------------------------------------
 void moduloAlbuns() {
     int opcaoAlbum;
