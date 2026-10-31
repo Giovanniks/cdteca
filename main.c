@@ -28,7 +28,7 @@ struct Musica {
 struct Musica listaMusicas[50];
 int totalMusicas = 0;
 
-// 3. Perspectiva do Alan: Cadastro de Artistas / Bandas
+// 3. Perspectiva do Alan (47135221): Cadastro de Artistas / Bandas
 struct Artista {
     int idArtista;
     char nomeArtista[40];
