@@ -68,7 +68,7 @@ void exibirCabecalho() {
 void moduloAlbuns() {
     int opcaoAlbum;
     do {
-        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Giovanni)] ---\n");
+        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Giovanni 48079391)] ---\n");
         printf("1. Cadastrar Novo Álbum\n");
         printf("2. Listar / Buscar Álbuns\n");
         printf("3. Editar Dados do Álbum\n");
