@@ -6,7 +6,7 @@
 // PARTE 1: MODELAGEM DE DADOS (ESCOPO GLOBAL - 4 STRUCTS)
 // ============================================================================
 
-// 1. Perspectiva do Giovanni: Catálogo de Álbuns / CDs
+// 1. Perspectiva do Giovanni(48079391): Catálogo de Álbuns / CDs
 struct Album {
     int idAlbum;
     char tituloAlbum[50];
@@ -17,7 +17,7 @@ struct Album {
 struct Album catalogoAlbuns[50];
 int totalAlbuns = 0;
 
-// 2. Perspectiva do Vinicius: Gestão de Músicas / Faixas
+// 2. Perspectiva do Vinicius(47511818): Gestão de Músicas / Faixas
 struct Musica {
     int idMusica;
     char nomeMusica[40];
@@ -68,7 +68,7 @@ void exibirCabecalho() {
 void moduloAlbuns() {
     int opcaoAlbum;
     do {
-        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Giovanni 48079391)] ---\n");
+        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Giovanni )] ---\n");
         printf("1. Cadastrar Novo Álbum\n");
         printf("2. Listar / Buscar Álbuns\n");
         printf("3. Editar Dados do Álbum\n");
