@@ -38,6 +38,7 @@ struct Artista {
 };
 struct Artista cadastroArtistas[50];
 int totalArtistas = 0;
+int proximoIdArtista = 1;
 
 // 4. Perspectiva do Giovanni: Músicas Curtidas e Relatórios
 struct MusicaCurtida {
@@ -141,6 +142,20 @@ void moduloMusicas() {
 // MÓDULO 3: PERSPECTIVA DE ARTISTAS / BANDAS
 // Autor: Integrante C Alan (47135221)
 // ----------------------------------------------------------------------------
+
+int nomeJaCadastrado(const char *nome, int ignorarPosicao){
+	for(int i = 0; i < totalArtistas; i++){
+		if (i != ignorarPosicao && cadastroArtistas[i].ativo && strcmp(cadastroArtistas[i].nomeArtista, nome)){
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void exibirArtista(const struct Artista *a){
+	printf("ID: %-3d | %-25s | Pais: %-15s | Albuns: %-2d | %s\n", a->idArtista, a->nomeArtista, a->paisOrigem, a->quantidadeAlbuns, a->ativo ? "Ativo" : "Inativo");
+}
+
 void moduloArtistas() {
     int opcaoArtista;
     do {
@@ -177,7 +192,7 @@ void moduloArtistas() {
 
 // ----------------------------------------------------------------------------
 // MÓDULO 4: PERSPECTIVA DE MÚSICAS CURTIDAS E RELATÓRIOS
-// Autor: Integrante C (Giovanni)
+// Autor: Integrante A (Giovanni)
 // ----------------------------------------------------------------------------
 void moduloCurtidasRelatorios() {
     int opcaoCurtida;
