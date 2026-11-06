@@ -256,14 +256,19 @@ void moduloArtistas() {
                     scanf("%d", &cadastroArtistas[totalArtistas].quantidadeAlbuns);
                     
                     int qtd;
-					while (scanf("%d", &qtd) != 1 || qtd < 0) {
-    					printf("Valor inválido! Digite um número maior ou igual a 0: ");
+					do {
+    					printf("Quantidade de álbuns: ");
+    					scanf("%d", &qtd);
     					
-    				while (getchar() != '\n'); 
-				}
-					cadastroArtistas[totalArtistas].quantidadeAlbuns = qtd;
+    					if (qtd < 0) {
+        					printf("[ERRO] A quantidade não pode ser negativa!\n");
+    					}
+					} while (qtd < 0);
+					
 
-                    cadastroArtistas[totalArtistas].ativo = 1;
+						cadastroArtistas[totalArtistas].quantidadeAlbuns = qtd;
+
+				    	cadastroArtistas[totalArtistas].ativo = 1;
 
                     printf("\n[OK] Artista \"%s\" cadastrado com ID %d!\n", cadastroArtistas[totalArtistas].nomeArtista, cadastroArtistas[totalArtistas].idArtista);
 
