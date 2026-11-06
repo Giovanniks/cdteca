@@ -1,4 +1,10 @@
 // 2. Perspectiva do Vinicius(47511818): Gestão de Músicas / Faixas
+#ifndef MUSICAS_H
+#define MUSICAS_H
+#include <stdio.h>
+#include <string.h>
+#define MAX_MUSICAS 50
+
 struct Musica {
     int idMusica;
     char nomeMusica[40];
@@ -6,7 +12,7 @@ struct Musica {
     int idAlbumPertencente;
     int numeroFaixa;
 };
-struct Musica listaMusicas[50];
+struct Musica listaMusicas[MAX_MUSICAS];
 int totalMusicas = 0;
 
 // ----------------------------------------------------------------------------
