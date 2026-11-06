@@ -104,10 +104,7 @@ void moduloAlbuns() {
 // MÓDULO 2: PERSPECTIVA DE MÚSICAS / FAIXAS
 // Autor: Integrante B (Vinicius)
 // ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
-// MÓDULO 2: PERSPECTIVA DE MÚSICAS / FAIXAS
-// Autor: Integrante B (Vinicius)
-// ----------------------------------------------------------------------------
+
 void moduloMusicas() {
     int opcaoMusica;
     do {
