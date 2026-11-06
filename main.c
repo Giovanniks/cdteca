@@ -288,7 +288,6 @@ void moduloArtistas() {
             			printf("País de origem: %s\n", cadastroArtistas[i].paisOrigem);
             			printf("Álbuns: %d\n", cadastroArtistas[i].quantidadeAlbuns);
             
-            // Substituição do operador ternário por if-else tradicional
             	if (cadastroArtistas[i].ativo == 1) {
                		printf("Status: Ativo\n");
             	} else {
