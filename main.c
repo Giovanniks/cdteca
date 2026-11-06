@@ -239,7 +239,8 @@ void moduloArtistas() {
         scanf("%d", &opcaoArtista);
 
         switch (opcaoArtista) {
-            case 1:
+    
+            case 1: {
                 if (totalArtistas >= 50) {
                     printf("\n[ERRO] Limite de 50 artistas atingido!\n");
                 } else {
@@ -252,83 +253,88 @@ void moduloArtistas() {
                     printf("País de origem: ");
                     scanf(" %29[^\n]", cadastroArtistas[totalArtistas].paisOrigem);
 
-                    printf("Quantidade de álbuns: ");
-                    scanf("%d", &cadastroArtistas[totalArtistas].quantidadeAlbuns);
-                    
                     int qtd;
-					do {
-    					printf("Quantidade de álbuns: ");
-    					scanf("%d", &qtd);
-    					
-    					if (qtd < 0) {
-        					printf("[ERRO] A quantidade não pode ser negativa!\n");
-    					}
-					} while (qtd < 0);
-					
+                    do {
+                        printf("Quantidade de álbuns: ");
+                        scanf("%d", &qtd);
+                        
+                        if (qtd < 0) {
+                            printf("[ERRO] A quantidade não pode ser negativa!\n");
+                        }
+                    } while (qtd < 0);
 
-						cadastroArtistas[totalArtistas].quantidadeAlbuns = qtd;
+                    cadastroArtistas[totalArtistas].quantidadeAlbuns = qtd;
+                    cadastroArtistas[totalArtistas].ativo = 1;
 
-				    	cadastroArtistas[totalArtistas].ativo = 1;
-
-                    printf("\n[OK] Artista \"%s\" cadastrado com ID %d!\n", cadastroArtistas[totalArtistas].nomeArtista, cadastroArtistas[totalArtistas].idArtista);
+                    printf("\n[OK] Artista \"%s\" cadastrado com ID %d!\n", 
+                           cadastroArtistas[totalArtistas].nomeArtista, 
+                           cadastroArtistas[totalArtistas].idArtista);
 
                     totalArtistas++;
                     proximoIdArtista++;
                 }
                 break;
+            }
 
-           	case 2:
-    				printf("\n--- [LISTA DE ARTISTAS] ---\n");
-   				if (totalArtistas == 0) {
-        			printf("Nenhum artista cadastrado ainda.\n");
-    			} else {
-        			for (int i = 0; i < totalArtistas; i++) {
-            			printf("\nID: %d\n", cadastroArtistas[i].idArtista);
-            			printf("Nome: %s\n", cadastroArtistas[i].nomeArtista);
-            			printf("País de origem: %s\n", cadastroArtistas[i].paisOrigem);
-            			printf("Álbuns: %d\n", cadastroArtistas[i].quantidadeAlbuns);
-            
-            	if (cadastroArtistas[i].ativo == 1) {
-               		printf("Status: Ativo\n");
-            	} else {
-                	printf("Status: Inativo\n");
-            	}
-            		printf("------------------------\n");
-        	}
-    }
-    			break;
+            case 2: {
+                printf("\n--- [LISTA DE ARTISTAS] ---\n");
+                if (totalArtistas == 0) {
+                    printf("Nenhum artista cadastrado ainda.\n");
+                } else {
+                    for (int i = 0; i < totalArtistas; i++) {
+                        printf("\nID: %d\n", cadastroArtistas[i].idArtista);
+                        printf("Nome: %s\n", cadastroArtistas[i].nomeArtista);
+                        printf("País de origem: %s\n", cadastroArtistas[i].paisOrigem);
+                        printf("Álbuns: %d\n", cadastroArtistas[i].quantidadeAlbuns);
+                        
+                        if (cadastroArtistas[i].ativo == 1) {
+                            printf("Status: Ativo\n");
+                        } else {
+                            printf("Status: Inativo\n");
+                        }
+                    }
+                }
+                break;
+            }
 
             case 3: {
-    			int idBusca;
-    			int achou = 0;
+                int idBusca;
+                int achou = 0;
 
-    			printf("\n--- [ATUALIZAR ARTISTA] ---\n");
-    			printf("Digite o ID do artista: ");
-    			scanf("%d", &idBusca);
+                printf("\n--- [ATUALIZAR ARTISTA] ---\n");
+                printf("Digite o ID do artista: ");
+                scanf("%d", &idBusca);
 
-    			for (int i = 0; i < totalArtistas; i++) {
-        			if (cadastroArtistas[i].idArtista == idBusca) {
-            			printf("Novo nome: ");
-            			scanf(" %39[^\n]", cadastroArtistas[i].nomeArtista);
+                for (int i = 0; i < totalArtistas; i++) {
+                    if (cadastroArtistas[i].idArtista == idBusca) {
+                        printf("Novo nome: ");
+                        scanf(" %39[^\n]", cadastroArtistas[i].nomeArtista);
 
-            			printf("Novo país de origem: ");
-            			scanf(" %29[^\n]", cadastroArtistas[i].paisOrigem);
+                        printf("Novo país de origem: ");
+                        scanf(" %29[^\n]", cadastroArtistas[i].paisOrigem);
 
-            			printf("Nova quantidade de álbuns: ");
-            			scanf("%d", &cadastroArtistas[i].quantidadeAlbuns);
+                        int qtdNova;
+                        do {
+                            printf("Nova quantidade de álbuns: ");
+                            scanf("%d", &qtdNova);
+                            if (qtdNova < 0) {
+                                printf("[ERRO] A quantidade não pode ser negativa!\n");
+                            }
+                        } while (qtdNova < 0);
 
-            			printf("\n[SUCESSO] Artista atualizado!\n");
-            			
-            			achou = 1;
-            			break;
+                        cadastroArtistas[i].quantidadeAlbuns = qtdNova;
+                        printf("\n[SUCESSO] Artista atualizado!\n");
+                        
+                        achou = 1;
+                        break;
                     }
                 }
 
-    				if (!achou) {
-        				printf("\n[ERRO] Artista com ID %d não encontrado!\n", idBusca);
-                    }
-    					break;
-	            }	
+                if (!achou) {
+                    printf("\n[ERRO] Artista com ID %d não encontrado!\n", idBusca);
+                }
+                break;
+            }
 
             case 4: {
                 int idBusca;
@@ -359,8 +365,8 @@ void moduloArtistas() {
 
             default:
                 printf("\n[ERRO] Opção inválida no Módulo de Artistas!\n");
-            }
-        } while (opcaoArtista != 0);
+        }
+    } while (opcaoArtista != 0);
 }
 
 
