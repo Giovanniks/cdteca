@@ -254,6 +254,14 @@ void moduloArtistas() {
 
                     printf("Quantidade de álbuns: ");
                     scanf("%d", &cadastroArtistas[totalArtistas].quantidadeAlbuns);
+                    
+                    int qtd;
+					while (scanf("%d", &qtd) != 1 || qtd < 0) {
+    					printf("Valor inválido! Digite um número maior ou igual a 0: ");
+    					
+    				while (getchar() != '\n'); 
+				}
+					cadastroArtistas[totalArtistas].quantidadeAlbuns = qtd;
 
                     cadastroArtistas[totalArtistas].ativo = 1;
 
@@ -274,14 +282,15 @@ void moduloArtistas() {
             			printf("Nome: %s\n", cadastroArtistas[i].nomeArtista);
             			printf("País de origem: %s\n", cadastroArtistas[i].paisOrigem);
             			printf("Álbuns: %d\n", cadastroArtistas[i].quantidadeAlbuns);
-        
+            
+            // Substituição do operador ternário por if-else tradicional
             	if (cadastroArtistas[i].ativo == 1) {
                		printf("Status: Ativo\n");
             	} else {
                 	printf("Status: Inativo\n");
             	}
             		printf("------------------------\n");
-        }
+        	}
     }
     			break;
 
