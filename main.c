@@ -2,20 +2,11 @@
 #include <string.h>
 #include <locale.h>
 
+#include "include/albuns.h"
+
 // ============================================================================
 // PARTE 1: MODELAGEM DE DADOS (ESCOPO GLOBAL - 4 STRUCTS)
 // ============================================================================
-
-// 1. Perspectiva do Giovanni(48079391): Catálogo de Álbuns / CDs
-struct Album {
-    int idAlbum;
-    char tituloAlbum[50];
-    int anoLancamento;
-    char genero[30];
-    int disponivelNaColecao; // 1 = Sim, 0 = Emprestado/Perdido
-};
-struct Album catalogoAlbuns[50];
-int totalAlbuns = 0;
 
 // 2. Perspectiva do Vinicius(47511818): Gestão de Músicas / Faixas
 struct Musica {
@@ -49,6 +40,8 @@ struct MusicaCurtida {
 };
 struct MusicaCurtida historicoCurtidas[50];
 int totalCurtidas = 0;
+int i;
+int j;
 
 
 // ============================================================================
@@ -58,46 +51,8 @@ int totalCurtidas = 0;
 // Função Visual Comum da Equipe
 void exibirCabecalho() {
     printf("\n======================================================\n");
-    printf("         CDTECA PESSOAL - MINHA COLEÇÃO MUSICAL       \n");
+    printf("         CDTECA PESSOAL - MINHA COLE��O MUSICAL       \n");
     printf("======================================================\n");
-}
-
-// ----------------------------------------------------------------------------
-// MÓDULO 1: PERSPECTIVA DE ÁLBUNS / CDS
-// Autor: Integrante A (Giovanni 48079391)
-// ----------------------------------------------------------------------------
-void moduloAlbuns() {
-    int opcaoAlbum;
-    do {
-        printf("\n--- [MÓDULO 1: CATÁLOGO DE ÁLBUNS (Giovanni )] ---\n");
-        printf("1. Cadastrar Novo Álbum\n");
-        printf("2. Listar / Buscar Álbuns\n");
-        printf("3. Editar Dados do Álbum\n");
-        printf("4. Remover Álbum\n");
-        printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma ação: ");
-        scanf("%d", &opcaoAlbum);
-
-        switch (opcaoAlbum) {
-            case 1:
-                printf("\n[Em construção] Rotina de Cadastro de Álbum...\n");
-                break;
-            case 2:
-                printf("\n[Em construção] Rotina de Listagem e Busca de Álbuns...\n");
-                break;
-            case 3:
-                printf("\n[Em construção] Rotina de Edição de Álbum...\n");
-                break;
-            case 4:
-                printf("\n[Em construção] Rotina de Remoção de Álbum...\n");
-                break;
-            case 0:
-                printf("\nRetornando ao menu principal...\n");
-                break;
-            default:
-                printf("\n[ERRO] Opção inválida no Módulo de Álbuns!\n");
-        }
-    } while (opcaoAlbum != 0);
 }
 
 // ----------------------------------------------------------------------------
@@ -144,7 +99,7 @@ void moduloMusicas() {
                 printf("\n[ERRO] Nenhuma musica cadastrada!\n");
               } else {
                 printf("\n--- [LISTA DE MÚSICAS CADASTRADAS] ---\n");
-                for (int i = 0; i < totalMusicas; i++) {
+                for (i = 0; i < totalMusicas; i++) {
                   printf("\nID: %d\n", listaMusicas[i].idMusica);
                   printf("Nome: %s\n", listaMusicas[i].nomeMusica);
                   printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
@@ -163,7 +118,7 @@ void moduloMusicas() {
                 printf("\n--- [ALTERAR DADOS DA MÚSICA] ---\n");
                 printf("Digite o ID da musica que deseja alterar: ");
                 scanf("%d", &idBusca);
-                for (int i = 0; i < totalMusicas; i++) {
+                for (i = 0; i < totalMusicas; i++) {
                   if (listaMusicas[i].idMusica == idBusca) {
                     achou = 1;
                     printf("\nMusica Encontrada: %s\n", listaMusicas[i].nomeMusica);
@@ -191,10 +146,10 @@ void moduloMusicas() {
                 printf("\n--- [EXCLUIR MÚSICA] ---\n");
                 printf("Digite o ID da musica que deseja excluir: ");
                 scanf("%d", &idExcluir);
-                for (int i = 0; i < totalMusicas; i++) {
+                for (i = 0; i < totalMusicas; i++) {
                   if (listaMusicas[i].idMusica == idExcluir) {
                     achou = 1;
-                    for (int j = i; j < totalMusicas - 1; j++) {
+                    for (j = i; j < totalMusicas - 1; j++) {
                       listaMusicas[j] = listaMusicas[j + 1];
                 }
                     totalMusicas--;
@@ -278,7 +233,7 @@ void moduloArtistas() {
                 if (totalArtistas == 0) {
                     printf("Nenhum artista cadastrado ainda.\n");
                 } else {
-                    for (int i = 0; i < totalArtistas; i++) {
+                    for (i = 0; i < totalArtistas; i++) {
                         printf("\nID: %d\n", cadastroArtistas[i].idArtista);
                         printf("Nome: %s\n", cadastroArtistas[i].nomeArtista);
                         printf("País de origem: %s\n", cadastroArtistas[i].paisOrigem);
@@ -302,7 +257,7 @@ void moduloArtistas() {
                 printf("Digite o ID do artista: ");
                 scanf("%d", &idBusca);
 
-                for (int i = 0; i < totalArtistas; i++) {
+                for (i = 0; i < totalArtistas; i++) {
                     if (cadastroArtistas[i].idArtista == idBusca) {
                         printf("Novo nome: ");
                         scanf(" %39[^\n]", cadastroArtistas[i].nomeArtista);
@@ -341,7 +296,7 @@ void moduloArtistas() {
                 printf("Digite o ID do artista: ");
                 scanf("%d", &idBusca);
 
-                for (int i = 0; i < totalArtistas; i++) {
+                for (i = 0; i < totalArtistas; i++) {
                     if (cadastroArtistas[i].idArtista == idBusca) {
                         cadastroArtistas[i].ativo = 0;
                         printf("\n[SUCESSO] Artista \"%s\" desativado!\n", cadastroArtistas[i].nomeArtista);
@@ -414,24 +369,35 @@ void moduloCurtidasRelatorios() {
 }
 
 
-// ============================================================================
-// PARTE 3: FUNÇÃO PRINCIPAL (MAIN) - DESPACHANTE DE MENUS
-// ============================================================================
+void limparTela() {
+    #ifdef _WIN32
+        system("cls");   // Para Windows
+    #else
+        system("clear"); // Para Linux
+    #endif
+}
+
+
 int main() {
     setlocale(LC_ALL, "Portuguese");
+    
+    carregarAlbunsCSV();
 
     int opcaoPrincipal;
 
     do {
+    	
+    	limparTela();
+    	
         exibirCabecalho();
         printf("SELECIONE A PERSPECTIVA DO SISTEMA:\n");
-        printf("1. Módulo de Álbuns / CDs (Giovanni)\n");
-        printf("2. Módulo de Músicas / Faixas (Vinicius)\n");
-        printf("3. Módulo de Artistas / Bandas (Alan)\n");
-        printf("4. Módulo de Curtidas e Relatórios (Giovanni)\n");
+        printf("1. M�dulo de �lbuns / CDs (Giovanni)\n");
+        printf("2. M�dulo de M�sicas / Faixas (Vinicius)\n");
+        printf("3. M�dulo de Artistas / Bandas (Alan)\n");
+        printf("4. M�dulo de Curtidas e Relat�rios (Giovanni)\n");
         printf("0. Encerrar o Sistema\n");
         printf("------------------------------------------------------\n");
-        printf("Digite a opção desejada: ");
+        printf("Digite a op��o desejada: ");
         scanf("%d", &opcaoPrincipal);
 
         switch (opcaoPrincipal) {
@@ -448,10 +414,10 @@ int main() {
                 moduloCurtidasRelatorios();
                 break;
             case 0:
-                printf("\nEncerrando o sistema CDteca Pessoal... Até logo!\n");
+                printf("\nEncerrando o sistema CDteca Pessoal... At� logo!\n");
                 break;
             default:
-                printf("\n[ALERTA] Opção inválida! Digite um número de 0 a 4.\n");
+                 printf("\n[ALERTA] Op��o inv�lida! Digite um n�mero de 0 a 4.\n");
         }
     } while (opcaoPrincipal != 0);
 
