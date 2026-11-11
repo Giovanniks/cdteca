@@ -2,6 +2,13 @@
 #include <string.h>
 #include <locale.h>
 
+struct Artista {
+    int idArtista;
+    char nomeArtista[40];
+    char paisOrigem[30];
+    int quantidadeAlbuns;
+    int ativo;
+
 void moduloArtistas() {
     int opcaoArtista;
     do {
