@@ -17,8 +17,7 @@ struct Album {
 };
 
 struct Album catalogoAlbuns[MAX_ALBUNS];
-	int totalAlbuns = 0;
-	int i;	
+	int totalAlbuns = 0;	
 
 // Salva tudo dentro do CSV
 void salvarAlbunsCSV() {
@@ -41,6 +40,7 @@ void salvarAlbunsCSV() {
 
 // Carrega os albuns do arquivos se tiver
 void carregarAlbunsCSV() {
+	int i;
 	FILE *arq = fopen("data/albuns.csv", "r");
 	if (arq == NULL) return; // inicia vazio caso nn tenha arquivo
 	
@@ -59,6 +59,7 @@ void carregarAlbunsCSV() {
 
 // Procura e ve se o albúm existe, se existir também passa a posição.
 int buscarAlbumPorNome (char *nomeProcurado) {
+	int i;
 	for (i = 0; i < totalAlbuns; i++) {
 		if (strcasecmp(catalogoAlbuns[i].tituloAlbum, nomeProcurado) == 0) {
 			return i;
@@ -69,6 +70,7 @@ int buscarAlbumPorNome (char *nomeProcurado) {
 
 // Validador de ID
 int buscarAlbumPorId(int idProcurado) {
+	int i;
     for (i = 0; i < totalAlbuns; i++) {
         if (catalogoAlbuns[i].idAlbum == idProcurado) {
             return i;
@@ -120,6 +122,7 @@ void cadastrarAlbum() {
 
 //Catálogo de Albuns
 void listarAlbuns() {
+	int i;
 	printf("\n-- CATÁLOGO DE ÁLBUNS (%d itens) --\n", totalAlbuns);
 	if (totalAlbuns == 0) {
 		printf("Nenhum Álbum Cadastrado ainda.\n\n");
@@ -139,6 +142,7 @@ void listarAlbuns() {
 
 //Buscar album por nome
 void buscarAlbumPorNomeParcial() {
+	int i;
 	char termo[50];
 	printf("\n-- BUSCAR ÁLBUM POR TÍTULO --\n");
 	printf("Digite parte do título do álbum: ");
@@ -195,6 +199,7 @@ void editarAlbum() {
 
 //Excluir Album
 void excluirAlbum() {
+	int i;
 	int idProcura;
 	printf("\n-- EXCLUIR ÁLBUM --\n");
 	printf("Digite o ID do álbum que deseja remover: ");
