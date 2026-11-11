@@ -1,6 +1,11 @@
+#ifndef ALBUNS_H
+#define ALBUNS_H
+
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+
+#define MAX_ALBUNS 50
 
 struct Artista {
     int idArtista;
@@ -8,6 +13,58 @@ struct Artista {
     char paisOrigem[30];
     int quantidadeAlbuns;
     int ativo;
+
+struct Artista cadastroArtistas[MAX_ARTISTAS];
+int totalArtistas = 0;
+int proximoIdArtista = 1;
+
+ 
+/* Salva todos os artistas do CSV */
+void salvarArtistasCSV() {
+    FILE *arq = fopen(ARQUIVO_ARTISTAS, "w");
+    if (arq == NULL) {
+        printf("[ERRO] Não foi possível salvar o arquivo %s!\n", ARQUIVO_ARTISTAS);
+        return;
+    }
+ 
+    fprintf(arq, "idArtista;nomeArtista;paisOrigem;quantidadeAlbuns;ativo\n");
+    for (int i = 0; i < totalArtistas; i++) {
+        fprintf(arq, "%d;%s;%s;%d;%d\n",
+                cadastroArtistas[i].idArtista,
+                cadastroArtistas[i].nomeArtista,
+                cadastroArtistas[i].paisOrigem,
+                cadastroArtistas[i].quantidadeAlbuns,
+                cadastroArtistas[i].ativo);
+    }
+    fclose(arq);
+}
+ 
+/* Carrega os artistas do CSV ao iniciar o programa */
+void carregarArtistasCSV() {
+    FILE *arq = fopen(ARQUIVO_ARTISTAS, "r");
+    if (arq == NULL) {
+        return; /* primeira execução: arquivo ainda não existe */
+    }
+ 
+    char linha[200];
+    fgets(linha, sizeof(linha), arq); /* pula o cabeçalho */
+ 
+    totalArtistas = 0;
+    proximoIdArtista = 1;
+ 
+    while (totalArtistas < MAX_ARTISTAS && fgets(linha, sizeof(linha), arq) != NULL) {
+        struct Artista a;
+        if (sscanf(linha, "%d;%39[^;];%29[^;];%d;%d",
+                   &a.idArtista, a.nomeArtista, a.paisOrigem,
+                   &a.quantidadeAlbuns, &a.ativo) == 5) {
+            cadastroArtistas[totalArtistas++] = a;
+            if (a.idArtista >= proximoIdArtista) {
+                proximoIdArtista = a.idArtista + 1;
+            }
+        }
+    }
+    fclose(arq);
+}
 
 void moduloArtistas() {
     int opcaoArtista;
