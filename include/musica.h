@@ -1,4 +1,4 @@
-//Perspectiva do Vinicius(47511818): Gestão de Músicas / Faixas
+// Arquivo: musica.h | Autor: Integrante B (Vinicius- (47511818))
 #ifndef MUSICAS_H
 #define MUSICAS_H
 #include <stdio.h>
@@ -16,7 +16,7 @@ struct Musica listaMusicas[MAX_MUSICAS];
 int totalMusicas = 0;
 
 // ----------------------------------------------------------------------------
-// 2. PERSISTÊNCIA: Salva todo o vetor no arquivo musicas.csv
+// 1. PERSISTÊNCIA: Salva todo o vetor no arquivo musicas.csv
 // Autor: Integrante B (Vinicius)
 // ----------------------------------------------------------------------------
 void salvarMusicasCSV() {
@@ -34,6 +34,23 @@ void salvarMusicasCSV() {
                 listaMusicas[i].duracaoMinutos,
                 listaMusicas[i].idAlbumPertencente,
                 listaMusicas[i].numeroFaixa);
+    }
+    fclose(arq);
+}
+// 2. PERSISTÊNCIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
+void carregarMusicasCSV() {
+    FILE *arq = fopen("musicas.csv", "r");
+    if (arq == NULL) return; // Se o arquivo nao existir ainda, inicia zerado
+
+    totalMusicas = 0;
+    while (totalMusicas < MAX_MUSICAS &&
+           fscanf(arq, "%d;%39[^;];%f;%d;%d\n",
+                  &listaMusicas[totalMusicas].idMusica,
+                  listaMusicas[totalMusicas].nomeMusica,
+                  &listaMusicas[totalMusicas].duracaoMinutos,
+                  &listaMusicas[totalMusicas].idAlbumPertencente,
+                  &listaMusicas[totalMusicas].numeroFaixa) == 5) {
+        totalMusicas++;
     }
     fclose(arq);
 }
