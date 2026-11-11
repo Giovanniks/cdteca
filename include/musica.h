@@ -20,11 +20,11 @@ int totalMusicas = 0;
 // Autor: Integrante B (Vinicius)
 // ----------------------------------------------------------------------------
 void salvarMusicasCSV() {
-    int i; 
-    FILE *arq = fopen("musicas.csv", "w");
+    int i;
+    FILE *arq = fopen("data/musicas.csv", "w"); 
     
     if (arq == NULL) {
-        printf("[ERRO] Nao foi possivel gravar musicas.csv!\n");
+        printf("[ERRO] Nao foi possivel gravar data/musicas.csv!\n");
         return;
     }
     for (i = 0; i < totalMusicas; i++) {
@@ -39,8 +39,8 @@ void salvarMusicasCSV() {
 }
 // 2. PERSISTÊNCIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
 void carregarMusicasCSV() {
-    FILE *arq = fopen("musicas.csv", "r");
-    if (arq == NULL) return; // Se o arquivo nao existir ainda, inicia zerado
+    FILE *arq = fopen("data/musicas.csv", "r");
+    if (arq == NULL) return;
 
     totalMusicas = 0;
     while (totalMusicas < MAX_MUSICAS &&
