@@ -152,13 +152,55 @@ void buscarMusicaPorNome(){
     }
 }
 
-
-    
-
 // ----------------------------------------------------------------------------
-// MÓDULO 3: PERSPECTIVA DE MÚSICAS / FAIXAS
-// Autor: Integrante B (Vinicius)
+// 8. EDIÇÃO NA MEMÓRIA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
+void editarMusica(){
+    int id;
+    int pos;
+
+    printf("\nDigite o ID da musica que deseja EDITAR: ");
+    scanf("%d", &id);
+    pos = buscarIndiceMusica(id);
+    if (pos == -1) { 
+        printf("[ERRO] Musica nao encontrada!\n"); 
+        return; 
+    }
+
+    printf("Editando '%s'. Nova Duracao (minutos): ", listaMusicas[pos].nomeMusica);
+    scanf("%f", &listaMusicas[pos].duracaoMinutos);
+    printf("Novo Numero da Faixa: ");
+    scanf("%d", &listaMusicas[pos].numeroFaixa);
+
+    salvarMusicasCSV();
+    printf("[OK] Dados da musica atualizados no sistema e no CSV!\n");
+}
+
+//----------------------------------------------------------------------------
+// 9. REMOÇÃO FÍSICA NA MEMÓRIA SEGUIDA DE REESCRITA TOTAL DO CSV
+//----------------------------------------------------------------------------
+void removerMusica() {
+    int id;
+    int pos;
+    int j; // Declarada fora do for
+
+    printf("\nDigite o ID da musica que deseja REMOVER: ");
+    scanf("%d", &id);
+    pos = buscarIndiceMusica(id);
+    if (pos == -1) { 
+        printf("[ERRO] Musica nao encontrada!\n"); 
+        return; 
+    }
+
+    for (j = pos; j < totalMusicas - 1; j++) {
+        listaMusicas[j] = listaMusicas[j + 1];
+    }
+    totalMusicas--;
+    salvarMusicasCSV();
+    printf("[OK] Musica removida do sistema e do CSV!\n");
+}
+
+
 void moduloMusicas() {
     int opcaoMusica;
     do {
