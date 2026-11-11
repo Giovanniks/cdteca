@@ -7,6 +7,7 @@
 
 #define MAX_MUSICAS 50
 
+void limparTela();
 // ----------------------------------------------------------------------------
 // 1. ESTRUTURA E ARRAYS GLOBAIS
 // ----------------------------------------------------------------------------
@@ -74,14 +75,15 @@ int buscarIndiceMusica(int idProcurado) {
 }
 
 // ----------------------------------------------------------------------------
-//5- SUBFUNÇÃO DE CADASTRO
+// 5. SUBFUNÇÃO DE CADASTRO
 // ----------------------------------------------------------------------------
-void cadastrarMusica(){
+void cadastrarMusica() {
     int id;
     if (totalMusicas >= MAX_MUSICAS) {
         printf("\n[ERRO] Limite de 50 musicas atingido!\n");
-        break;
+        return; // CORRIGIDO: trocado 'break;' por 'return;'
     }
+    limparTela();
     printf("\n--- [CADASTRO DE NOVA MÚSICA] ---\n");
     printf("\nDigite o ID da nova musica: ");
     scanf("%d", &id);
@@ -102,37 +104,38 @@ void cadastrarMusica(){
     totalMusicas++;
     salvarMusicasCSV();
     printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
-    break;
-}
+    // CORRIGIDO: removido 'break;' desnecessario e a chave extra
 }
 
 // ----------------------------------------------------------------------------
 // 6. SUBFUNÇÃO DE LISTAGEM
 // ----------------------------------------------------------------------------
-void listarMusicas(){
+void listarMusicas() {
     int i;
+    limparTela();
     printf("\n--- CATALOGO DE MÚSICAS (%d itens) ---\n", totalMusicas);
     if (totalMusicas == 0) {
         printf("Nenhuma musica cadastrada.\n");
         return;
     }
-     for (int i = 0; i < totalMusicas; i++) {
-         printf("\nID: %d\n", listaMusicas[i].idMusica);
-         printf("Nome: %s\n", listaMusicas[i].nomeMusica);
-         printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
-         printf("ID do Album: %d\n", listaMusicas[i].idAlbumPertencente);
-         printf("Numero da Faixa: %d\n", listaMusicas[i].numeroFaixa);
-         printf("------------------------------------\n");
-     }
+    for (i = 0; i < totalMusicas; i++) { // CORRIGIDO: removido 'int' daqui
+        printf("\nID: %d\n", listaMusicas[i].idMusica);
+        printf("Nome: %s\n", listaMusicas[i].nomeMusica);
+        printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
+        printf("ID do Album: %d\n", listaMusicas[i].idAlbumPertencente);
+        printf("Numero da Faixa: %d\n", listaMusicas[i].numeroFaixa);
+        printf("------------------------------------\n");
+    }
 }
 
 // ----------------------------------------------------------------------------
-//7- SUBFUNÇÃO DE DE BUSCA TEXTUAL COM STRSTR
-//----------------------------------------------------------------------------
-void buscarMusicaPorNome(){
+// 7. SUBFUNÇÃO DE BUSCA TEXTUAL COM STRSTR
+// ----------------------------------------------------------------------------
+void buscarMusicaPorNome() {
     int i;
     int encontradas = 0;
     char termo[30];
+    limparTela();
 
     printf("\nDigite parte do nome da musica para buscar: ");
     scanf(" %29[^\n]", termo);
@@ -155,9 +158,10 @@ void buscarMusicaPorNome(){
 // ----------------------------------------------------------------------------
 // 8. EDIÇÃO NA MEMÓRIA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
-void editarMusica(){
+void editarMusica() {
     int id;
     int pos;
+    limparTela();
 
     printf("\nDigite o ID da musica que deseja EDITAR: ");
     scanf("%d", &id);
@@ -176,13 +180,14 @@ void editarMusica(){
     printf("[OK] Dados da musica atualizados no sistema e no CSV!\n");
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // 9. REMOÇÃO FÍSICA NA MEMÓRIA SEGUIDA DE REESCRITA TOTAL DO CSV
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 void removerMusica() {
     int id;
     int pos;
-    int j; // Declarada fora do for
+    int j;
+    limparTela();
 
     printf("\nDigite o ID da musica que deseja REMOVER: ");
     scanf("%d", &id);
@@ -200,18 +205,19 @@ void removerMusica() {
     printf("[OK] Musica removida do sistema e do CSV!\n");
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // 10. SUBMENU DO MÓDULO DE MÚSICAS
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
     do {
+    	limparTela();
         printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Vinicius)] ---\n");
         printf("1. Cadastrar Nova Música / Faixa\n");
         printf("2. Listar / Buscar Músicas\n");
         printf("3. Buscar Música pelo nome\n");
         printf("4. Editar Música\n");
-        printf("5- Excluir Música\n");
+        printf("5. Excluir Música\n");
         printf("0. Voltar ao Menu Principal\n");
         printf("Escolha uma ação: ");
         scanf("%d", &opcaoMusica);
@@ -227,7 +233,7 @@ void moduloMusicas() {
                 buscarMusicaPorNome();
                 break;
             case 4:
-                edtarMusica();
+                editarMusica(); // CORRIGIDO: digitação 'edtarMusica'
                 break;
             case 5:
                 removerMusica();
@@ -240,3 +246,5 @@ void moduloMusicas() {
         }
     } while (opcaoMusica != 0);
 }
+
+#endif // CORRIGIDO: adicionado o #endif no final
