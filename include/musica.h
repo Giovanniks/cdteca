@@ -200,15 +200,18 @@ void removerMusica() {
     printf("[OK] Musica removida do sistema e do CSV!\n");
 }
 
-
+//----------------------------------------------------------------------------
+// 10. SUBMENU DO MÓDULO DE MÚSICAS
+//----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
     do {
         printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Vinicius)] ---\n");
         printf("1. Cadastrar Nova Música / Faixa\n");
         printf("2. Listar / Buscar Músicas\n");
-        printf("3. Alterar Duração ou Número da Faixa\n");
-        printf("4. Excluir Música\n");
+        printf("3. Buscar Música pelo nome\n");
+        printf("4. Editar Música\n");
+        printf("5- Excluir Música\n");
         printf("0. Voltar ao Menu Principal\n");
         printf("Escolha uma ação: ");
         scanf("%d", &opcaoMusica);
@@ -217,67 +220,18 @@ void moduloMusicas() {
             case 1:
                 cadastrarMusica();
                 break;
-        }
-                
-                
             case 2:
                 listarMusicas();
                 break;
-    }
             case 3:
-              if (totalMusicas == 0) {
-                printf("\n[ERRO] Nenhuma musica cadastrada para alterar!\n");
-              } else {
-                int idBusca;
-                int achou = 0;
-                printf("\n--- [ALTERAR DADOS DA MÚSICA] ---\n");
-                printf("Digite o ID da musica que deseja alterar: ");
-                scanf("%d", &idBusca);
-                for (int i = 0; i < totalMusicas; i++) {
-                  if (listaMusicas[i].idMusica == idBusca) {
-                    achou = 1;
-                    printf("\nMusica Encontrada: %s\n", listaMusicas[i].nomeMusica);
-                    printf("Duracao atual: %.2f min | Faixa atual: %d\n", 
-                           listaMusicas[i].duracaoMinutos, listaMusicas[i].numeroFaixa);
-                    printf("------------------------------------\n");
-                    printf("Digite a nova duracao em minutos: ");
-                    scanf("%f", &listaMusicas[i].duracaoMinutos);
-                    printf("Digite o novo numero da faixa: ");
-                    scanf("%d", &listaMusicas[i].numeroFaixa);
-                    printf("\n[SUCESSO] Dados da musica atualizados com sucesso!\n");
-            }
-        }
-                if (!achou) {
-                  printf("\n[ERRO] Musica com ID %d nao foi encontrada!\n", idBusca);
-        }
+                buscarMusicaPorNome();
                 break;
-    }
             case 4:
-              if (totalMusicas == 0) {
-                printf("\n[ERRO] Nenhuma musica cadastrada para excluir!\n");
-              } else {
-                int idExcluir;
-                int achou = 0;
-                printf("\n--- [EXCLUIR MÚSICA] ---\n");
-                printf("Digite o ID da musica que deseja excluir: ");
-                scanf("%d", &idExcluir);
-                for (int i = 0; i < totalMusicas; i++) {
-                  if (listaMusicas[i].idMusica == idExcluir) {
-                    achou = 1;
-                    for (int j = i; j < totalMusicas - 1; j++) {
-                      listaMusicas[j] = listaMusicas[j + 1];
-                }
-                    totalMusicas--;
-                    printf("\n[SUCESSO] Musica com ID %d removida com sucesso!\n", idExcluir);
+                edtarMusica();
                 break;
-            }
-        }
-
-        if (!achou) {
-            printf("\n[ERRO] Musica com ID %d nao foi encontrada!\n", idExcluir);
-        }
-    }
-    break;
+            case 5:
+                removerMusica();
+                break;
             case 0:
                 printf("\nRetornando ao menu principal...\n");
                 break;
