@@ -1,10 +1,15 @@
 // Arquivo: musica.h | Autor: Integrante B (Vinicius- (47511818))
 #ifndef MUSICAS_H
 #define MUSICAS_H
+
 #include <stdio.h>
 #include <string.h>
+
 #define MAX_MUSICAS 50
 
+// ----------------------------------------------------------------------------
+// 1. ESTRUTURA E ARRAYS GLOBAIS
+// ----------------------------------------------------------------------------
 struct Musica {
     int idMusica;
     char nomeMusica[40];
@@ -16,8 +21,7 @@ struct Musica listaMusicas[MAX_MUSICAS];
 int totalMusicas = 0;
 
 // ----------------------------------------------------------------------------
-// 1. PERSISTÊNCIA: Salva todo o vetor no arquivo musicas.csv
-// Autor: Integrante B (Vinicius)
+// 2. PERSISTÊNCIA: Salva todo o vetor no arquivo musicas.csv
 // ----------------------------------------------------------------------------
 void salvarMusicasCSV() {
     int i;
@@ -37,7 +41,10 @@ void salvarMusicasCSV() {
     }
     fclose(arq);
 }
-// 2. PERSISTÊNCIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
+
+// ----------------------------------------------------------------------------
+// 3. PERSISTÊNCIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
+// ----------------------------------------------------------------------------
 void carregarMusicasCSV() {
     FILE *arq = fopen("data/musicas.csv", "r");
     if (arq == NULL) return;
@@ -54,6 +61,100 @@ void carregarMusicasCSV() {
     }
     fclose(arq);
 }
+
+// ----------------------------------------------------------------------------
+// 4. FUNÇÃO CHAVE-MESTRA: Retorna o índice onde o ID está, ou -1 se não existir
+// ----------------------------------------------------------------------------
+int buscarIndiceMusica(int idProcurado) {
+    int i;
+    for (i = 0; i < totalMusicas; i++) {
+        if (listaMusicas[i].idMusica == idProcurado) return i;
+    }
+    return -1;
+}
+
+// ----------------------------------------------------------------------------
+//5- SUBFUNÇÃO DE CADASTRO
+// ----------------------------------------------------------------------------
+void cadastrarMusica(){
+    int id;
+    if (totalMusicas >= MAX_MUSICAS) {
+        printf("\n[ERRO] Limite de 50 musicas atingido!\n");
+        break;
+    }
+    printf("\n--- [CADASTRO DE NOVA MÚSICA] ---\n");
+    printf("\nDigite o ID da nova musica: ");
+    scanf("%d", &id);
+    if (buscarIndiceMusica(id) != -1) {
+        printf("[ERRO] Ja existe uma musica com o ID %d!\n", id);
+        return;
+    }
+    listaMusicas[totalMusicas].idMusica = id;
+    printf("Nome da musica (com espaços):  ");
+    scanf(" %39[^\n]", listaMusicas[totalMusicas].nomeMusica);
+    printf("Duracao em minutos (ex: 3.5): ");
+    scanf("%f", &listaMusicas[totalMusicas].duracaoMinutos);
+    printf("ID do album pertencente: ");
+    scanf("%d", &listaMusicas[totalMusicas].idAlbumPertencente);
+    printf("Numero da faixa no album: ");
+    scanf("%d", &listaMusicas[totalMusicas].numeroFaixa);
+    
+    totalMusicas++;
+    salvarMusicasCSV();
+    printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
+    break;
+}
+}
+
+// ----------------------------------------------------------------------------
+// 6. SUBFUNÇÃO DE LISTAGEM
+// ----------------------------------------------------------------------------
+void listarMusicas(){
+    int i;
+    printf("\n--- CATALOGO DE MÚSICAS (%d itens) ---\n", totalMusicas);
+    if (totalMusicas == 0) {
+        printf("Nenhuma musica cadastrada.\n");
+        return;
+    }
+     for (int i = 0; i < totalMusicas; i++) {
+         printf("\nID: %d\n", listaMusicas[i].idMusica);
+         printf("Nome: %s\n", listaMusicas[i].nomeMusica);
+         printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
+         printf("ID do Album: %d\n", listaMusicas[i].idAlbumPertencente);
+         printf("Numero da Faixa: %d\n", listaMusicas[i].numeroFaixa);
+         printf("------------------------------------\n");
+     }
+}
+
+// ----------------------------------------------------------------------------
+//7- SUBFUNÇÃO DE DE BUSCA TEXTUAL COM STRSTR
+//----------------------------------------------------------------------------
+void buscarMusicaPorNome(){
+    int i;
+    int encontradas = 0;
+    char termo[30];
+
+    printf("\nDigite parte do nome da musica para buscar: ");
+    scanf(" %29[^\n]", termo);
+    
+    for (i = 0; i < totalMusicas; i++) {
+        if (strstr(listaMusicas[i].nomeMusica, termo) != NULL) {
+            printf(" -> Encontrada: [%d] %s (%.2f min) - Faixa %d\n",
+                   listaMusicas[i].idMusica, 
+                   listaMusicas[i].nomeMusica, 
+                   listaMusicas[i].duracaoMinutos,
+                   listaMusicas[i].numeroFaixa);
+            encontradas++;
+        }
+    }
+    if (encontradas == 0) {
+        printf("[INFO] Nenhuma musica encontrada com o termo '%s'.\n", termo);
+    }
+}
+
+
+    
+
 // ----------------------------------------------------------------------------
 // MÓDULO 3: PERSPECTIVA DE MÚSICAS / FAIXAS
 // Autor: Integrante B (Vinicius)
@@ -72,41 +173,15 @@ void moduloMusicas() {
 
         switch (opcaoMusica) {
             case 1:
-              if (totalMusicas >= 50) {
-                printf("\n[ERRO] Limite de 50 musicas atingido!\n");
-              } else {
-                printf("\n--- [CADASTRO DE NOVA MÚSICA] ---\n");
-                printf("ID da musica: ");
-                scanf("%d", &listaMusicas[totalMusicas].idMusica);
-                printf("Nome da musica: ");
-                scanf(" %[^\n]", listaMusicas[totalMusicas].nomeMusica);
-                printf("Duracao em minutos (ex: 3.5): ");
-                scanf("%f", &listaMusicas[totalMusicas].duracaoMinutos);
-                printf("ID do album pertencente: ");
-                scanf("%d", &listaMusicas[totalMusicas].idAlbumPertencente);
-                printf("Numero da faixa no album: ");
-                scanf("%d", &listaMusicas[totalMusicas].numeroFaixa);
-                totalMusicas++;
-                printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
+                cadastrarMusica();
                 break;
-              }
+        }
                 
                 
             case 2:
-              if (totalMusicas == 0) {
-                printf("\n[ERRO] Nenhuma musica cadastrada!\n");
-              } else {
-                printf("\n--- [LISTA DE MÚSICAS CADASTRADAS] ---\n");
-                for (int i = 0; i < totalMusicas; i++) {
-                  printf("\nID: %d\n", listaMusicas[i].idMusica);
-                  printf("Nome: %s\n", listaMusicas[i].nomeMusica);
-                  printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
-                  printf("ID do Album: %d\n", listaMusicas[i].idAlbumPertencente);
-                  printf("Numero da Faixa: %d\n", listaMusicas[i].numeroFaixa);
-                  printf("------------------------------------\n");
-                }
+                listarMusicas();
                 break;
-              }
+    }
             case 3:
               if (totalMusicas == 0) {
                 printf("\n[ERRO] Nenhuma musica cadastrada para alterar!\n");
