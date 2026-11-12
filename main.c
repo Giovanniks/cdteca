@@ -4,7 +4,7 @@
 
 #include "include/albuns.h"
 #include "include/musica.h"
-#include "include/artistas.h
+#include "include/artistas.h"
 
 
 
