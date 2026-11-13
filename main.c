@@ -31,13 +31,13 @@ int main() {
     carregarArtistasCSV();
     carregarCurtidasCSV();
 
-    int opcaoPrincipal;
+    int opcaoPrincipal = 0;
 
     do {
-    	
-    	limparTela();
-    	
-        exibirCabecalho();
+	    if (opcaoPrincipal >= 0 && opcaoPrincipal <= 4) {
+            limparTela();
+    }
+	    exibirCabecalho();
         printf("SELECIONE A PERSPECTIVA DO SISTEMA:\n");
         printf("1. Módulo de Álbuns / CDs (Giovanni)\n");
         printf("2. Módulo de Músicas / Faixas (Vinicius)\n");
