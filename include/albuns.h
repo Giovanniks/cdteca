@@ -22,7 +22,7 @@ struct Album catalogoAlbuns[MAX_ALBUNS];
 // Salva tudo dentro do CSV
 void salvarAlbunsCSV() {
 	int i;
-	FILE *arq = fopen("data/albuns.csv", "w"); // w exclui tudo e regrava novamente.
+	FILE *arq = fopen("data/albuns.csv", "w"); // w exclui tudo e regrava novamente
 	if (arq == NULL) {
 		printf("[ERRO] Não foi possivel gravar o arquivo albuns.csv!\n");
 		return;

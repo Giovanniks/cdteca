@@ -3,8 +3,8 @@
 #define MUSICAS_H
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #define MAX_MUSICAS 50
 
@@ -33,7 +33,7 @@ void salvarMusicasCSV() {
         return;
     }
     for (i = 0; i < totalMusicas; i++) {
-        fprintf(arq, "%d;%s;%.2f;%d;%d\n",
+        fprintf(arq, "%d;%s;%.2f;%s;%d\n",
                 listaMusicas[i].idMusica,
                 listaMusicas[i].nomeMusica,
                 listaMusicas[i].duracaoMinutos,
@@ -54,11 +54,11 @@ void carregarMusicasCSV() {
     
     // Leitura ajustada para nÃ£o quebrar no final da linha
     while (totalMusicas < MAX_MUSICAS &&
-           fscanf(arq, "%d;%39[^;\n];%f;%d;%d\n",
+           fscanf(arq, "%d;%39[^;\n];%f;%39[^;\n];%d\n",
                   &listaMusicas[totalMusicas].idMusica,
                   listaMusicas[totalMusicas].nomeMusica,
                   &listaMusicas[totalMusicas].duracaoMinutos,
-                  &listaMusicas[totalMusicas].generoMusica,
+                  listaMusicas[totalMusicas].generoMusica,
                   &listaMusicas[totalMusicas].anoLancamento) == 5) {
         totalMusicas++;
     }
@@ -102,7 +102,7 @@ void cadastrarMusica() {
     scanf("%f", &listaMusicas[totalMusicas].duracaoMinutos);
     printf("Genero musical: ");
     scanf(" %29[^\n]", listaMusicas[totalMusicas].generoMusica);
-    printf("Ano de lancamento: ");
+    printf("Ano de lançamento: ");
     scanf("%d", &listaMusicas[totalMusicas].anoLancamento);
 
     
@@ -118,7 +118,7 @@ void cadastrarMusica() {
 // ----------------------------------------------------------------------------
 void listarMusicas() {
     int i;
-    printf("\n--- CATALOGO DE MÃšSICAS (%d itens) ---\n", totalMusicas);
+    printf("\n--- CATALOGO DE MÚSICAS (%d itens) ---\n", totalMusicas);
     if (totalMusicas == 0) {
         printf("Nenhuma musica cadastrada.\n");
         return;
@@ -128,7 +128,7 @@ void listarMusicas() {
         printf("Nome: %s\n", listaMusicas[i].nomeMusica);
         printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
         printf("Genero: %s\n", listaMusicas[i].generoMusica);
-        printf("Ano de lancamento: %d\n", listaMusicas[i].anoLancamento);
+        printf("Ano de lançamento: %d\n", listaMusicas[i].anoLancamento);
         printf("------------------------------------\n");
     }
 }
@@ -155,7 +155,7 @@ void buscarMusicaPorNome() {
         }
     }
     if (encontradas == 0) {
-        printf("[INFO] Nenhuma musica encontrada com o termo '%s'.\n", termo);
+        printf("[INFO] Nenhuma música encontrada com o termo '%s'.\n", termo);
     }
 }
 
@@ -176,10 +176,10 @@ void editarMusica() {
         return;
     }
 
-    printf("\n--- EDITANDO MUSICA ---\n");
+    printf("\n--- EDITANDO MÚSICA ---\n");
     printf("Musica atual: %s\n", listaMusicas[pos].nomeMusica);
 
-    printf("Novo nome da musica: ");
+    printf("Novo nome da música: ");
     scanf(" %39[^\n]", listaMusicas[pos].nomeMusica);
 
     printf("Nova duracao em minutos: ");
@@ -225,15 +225,16 @@ void removerMusica() {
 // ----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
+    setlocale(LC_ALL, "Portuguese");
     do {
-        printf("\n--- [MÃ“DULO 2: GESTÃƒO DE MÃšSICAS (Vinicius)] ---\n");
-        printf("1. Cadastrar Nova MÃºsica / Faixa\n");
-        printf("2. Listar / Buscar MÃºsicas\n");
-        printf("3. Buscar MÃºsica pelo nome\n");
-        printf("4. Editar MÃºsica\n");
-        printf("5. Excluir MÃºsica\n");
+        printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Vinicius)] ---\n");
+        printf("1. Cadastrar Nova Música / Faixa\n");
+        printf("2. Listar / Buscar Músicas\n");
+        printf("3. Buscar Música pelo nome\n");
+        printf("4. Editar Música\n");
+        printf("5. Excluir Música\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma opÃ§Ã£o: ");
+        printf("Escolha uma opção: ");
         scanf("%d", &opcaoMusica);
 
         switch (opcaoMusica) {
@@ -256,7 +257,7 @@ void moduloMusicas() {
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] OpÃ§Ã£o invÃ¡lida no MÃ³dulo de MÃºsicas!\n");
+                printf("\n[ERRO] Opção inválida no Módulo de Músicas!\n");
         }
     } while (opcaoMusica != 0);
 }
