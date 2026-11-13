@@ -31,7 +31,7 @@ int lerInteiroArtista(int *valor) {
 }
 
 
-// Salva todos os artistas no CSV. Retorna 1 se salvou, 0 se falhou
+// Salva todos os artistas no CSV.
 int salvarArtistasCSV() {
     int i;
     FILE *arq = fopen("data/artistas.csv", "w"); // w apaga tudo e regrava
@@ -239,7 +239,7 @@ void atualizarArtista() {
     }
 }
 
-// Desativar artista (continua no cadastro, só muda o status)
+// Desativar artista 
 void desativarArtista() {
     int idBusca;
     printf("\n--- [DESATIVAR ARTISTA] ---\n");
@@ -353,5 +353,3 @@ void moduloArtistas() {
 }
 
 #endif
-
-#include <stdio.h>
