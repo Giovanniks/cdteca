@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <locale.h>
 
 #define MAX_ARTISTAS 50
@@ -32,14 +31,14 @@ int lerInteiroArtista(int *valor) {
 }
 
 
-// Salva todos os artistas no CSV
-void salvarArtistasCSV() {
+// Salva todos os artistas no CSV. Retorna 1 se salvou, 0 se falhou
+int salvarArtistasCSV() {
     int i;
     FILE *arq = fopen("data/artistas.csv", "w"); // w apaga tudo e regrava
-if (arq == NULL) {
-    printf("[ERRO] Não foi possível salvar o arquivo artistas.csv!\n");
-    return;
-}
+    if (arq == NULL) {
+        printf("[ERRO] Não foi possível salvar o arquivo artistas.csv!\n");
+        return 0;
+    }
 
     fprintf(arq, "idArtista;nomeArtista;paisOrigem;quantidadeAlbuns;ativo\n");
     for (i = 0; i < totalArtistas; i++) {
@@ -51,6 +50,7 @@ if (arq == NULL) {
                 cadastroArtistas[i].ativo);
     }
     fclose(arq);
+    return 1;
 }
 
 // Carrega os artistas do CSV, se o arquivo existir
@@ -234,11 +234,12 @@ void atualizarArtista() {
         printf("[INFO] Status inválido, mantido o valor anterior.\n");
     }
 
-    salvarArtistasCSV();
-    printf("\n[SUCESSO] Artista atualizado e salvo com sucesso!\n\n");
+    if (salvarArtistasCSV()) {
+        printf("\n[SUCESSO] Artista atualizado e salvo com sucesso!\n\n");
+    }
 }
 
-// Desativar artista
+// Desativar artista (continua no cadastro, só muda o status)
 void desativarArtista() {
     int idBusca;
     printf("\n--- [DESATIVAR ARTISTA] ---\n");
@@ -255,8 +256,54 @@ void desativarArtista() {
     }
 
     cadastroArtistas[pos].ativo = 0;
-    salvarArtistasCSV();
-    printf("\n[SUCESSO] Artista \"%s\" desativado!\n\n", cadastroArtistas[pos].nomeArtista);
+    if (salvarArtistasCSV()) {
+        printf("\n[SUCESSO] Artista \"%s\" desativado!\n\n", cadastroArtistas[pos].nomeArtista);
+    }
+}
+
+// Remover artista (exclui definitivamente do cadastro e do CSV)
+void removerArtista() {
+    int idBusca, i;
+    char confirmacao;
+
+    printf("\n--- [REMOVER ARTISTA] ---\n");
+    printf("Digite o ID do artista: ");
+    if (!lerInteiroArtista(&idBusca)) {
+        printf("[ERRO] ID inválido!\n\n");
+        return;
+    }
+
+    int pos = buscarArtistaPorId(idBusca);
+    if (pos == -1) {
+        printf("\n[ERRO] Artista com ID %d não encontrado!\n\n", idBusca);
+        return;
+    }
+
+    printf("\nArtista encontrado: [%d] %s (%s)\n",
+           cadastroArtistas[pos].idArtista,
+           cadastroArtistas[pos].nomeArtista,
+           cadastroArtistas[pos].paisOrigem);
+    printf("Tem certeza que deseja REMOVER definitivamente? (s/n): ");
+    scanf(" %c", &confirmacao);
+    while (getchar() != '\n'); // limpa o resto da linha
+
+    if (confirmacao != 's' && confirmacao != 'S') {
+        printf("\n[INFO] Remoção cancelada.\n\n");
+        return;
+    }
+
+    char nomeRemovido[40];
+    strcpy(nomeRemovido, cadastroArtistas[pos].nomeArtista);
+
+    // Desloca os artistas seguintes uma posição para trás
+    for (i = pos; i < totalArtistas - 1; i++) {
+        cadastroArtistas[i] = cadastroArtistas[i + 1];
+    }
+    totalArtistas--;
+
+    if (salvarArtistasCSV()) {
+        printf("\n[SUCESSO] Artista \"%s\" removido com sucesso!\n\n", nomeRemovido);
+    }
 }
 
 /* ---------- Menu do módulo ---------- */
@@ -271,7 +318,8 @@ void moduloArtistas() {
         printf("1. Cadastrar Novo Artista / Banda\n");
         printf("2. Consultar / Listar Artistas\n");
         printf("3. Atualizar Dados do Artista\n");
-        printf("4. Desativar / Remover Artista\n");
+        printf("4. Desativar Artista\n");
+        printf("5. Remover Artista\n");
         printf("0. Voltar ao Menu Principal\n");
         printf("Escolha uma ação: ");
 
@@ -292,6 +340,9 @@ void moduloArtistas() {
             case 4:
                 desativarArtista();
                 break;
+            case 5:
+                removerArtista();
+                break;
             case 0:
                 printf("\nRetornando ao menu principal...\n");
                 break;
@@ -302,3 +353,5 @@ void moduloArtistas() {
 }
 
 #endif
+
+#include <stdio.h>
