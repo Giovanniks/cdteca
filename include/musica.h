@@ -22,7 +22,7 @@ struct Musica listaMusicas[MAX_MUSICAS];
 int totalMusicas = 0;
 
 // ----------------------------------------------------------------------------
-// 2. PERSISTÊNCIA: Salva todo o vetor no arquivo musicas.csv
+// 2. PERSISTﾃ劾CIA: Salva todo o vetor no arquivo musicas.csv
 // ----------------------------------------------------------------------------
 void salvarMusicasCSV() {
     int i;
@@ -44,15 +44,15 @@ void salvarMusicasCSV() {
 }
 
 // ----------------------------------------------------------------------------
-// 3. PERSISTÊNCIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
+// 3. PERSISTﾃ劾CIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
 // ----------------------------------------------------------------------------
 void carregarMusicasCSV() {
     FILE *arq = fopen("data/musicas.csv", "r");
-    if (arq == NULL) return; // Se não existir arquivo ainda, mantem totalMusicas = 0
+    if (arq == NULL) return; // Se nﾃ｣o existir arquivo ainda, mantem totalMusicas = 0
 
     totalMusicas = 0; // Reseta o contador para preencher do zero a partir do arquivo
     
-    // Leitura ajustada para não quebrar no final da linha
+    // Leitura ajustada para nﾃ｣o quebrar no final da linha
     while (totalMusicas < MAX_MUSICAS &&
            fscanf(arq, "%d;%39[^;\n];%f;%39[^;\n];%d\n",
                   &listaMusicas[totalMusicas].idMusica,
@@ -66,7 +66,7 @@ void carregarMusicasCSV() {
 }
 
 // ----------------------------------------------------------------------------
-// 4. FUNÇÃO CHAVE-MESTRA: Retorna o índice onde o ID está, ou -1 se não existir
+// 4. FUNﾃ�グ CHAVE-MESTRA: Retorna o ﾃｭndice onde o ID estﾃ｡, ou -1 se nﾃ｣o existir
 // ----------------------------------------------------------------------------
 int buscarIndiceMusica(int idProcurado) {
     int i;
@@ -77,7 +77,7 @@ int buscarIndiceMusica(int idProcurado) {
 }
 
 // ----------------------------------------------------------------------------
-// 5. SUBFUNÇÃO DE CADASTRO
+// 5. SUBFUNﾃ�グ DE CADASTRO
 // ----------------------------------------------------------------------------
 void cadastrarMusica() {
     int id;
@@ -86,7 +86,7 @@ void cadastrarMusica() {
         return;
     }
 
-    printf("\n--- [CADASTRO DE NOVA MÚSICA] ---\n");
+    printf("\n--- [CADASTRO DE NOVA Mﾃ售ICA] ---\n");
     printf("Digite o ID da nova musica: ");
     scanf("%d", &id);
 
@@ -96,13 +96,13 @@ void cadastrarMusica() {
     }
 
     listaMusicas[totalMusicas].idMusica = id;
-    printf("Nome da musica: ");
+    printf("Nome da música: ");
     scanf(" %39[^\n]", listaMusicas[totalMusicas].nomeMusica);
     printf("Duracao em minutos (ex: 3.5): ");
     scanf("%f", &listaMusicas[totalMusicas].duracaoMinutos);
     printf("Genero musical: ");
     scanf(" %29[^\n]", listaMusicas[totalMusicas].generoMusica);
-    printf("Ano de lan�amento: ");
+    printf("Ano de lançamento: ");
     scanf("%d", &listaMusicas[totalMusicas].anoLancamento);
 
     
@@ -114,11 +114,11 @@ void cadastrarMusica() {
 }
 
 // ----------------------------------------------------------------------------
-// 6. SUBFUNÇÃO DE LISTAGEM
+// 6. SUBFUNﾃ�グ DE LISTAGEM
 // ----------------------------------------------------------------------------
 void listarMusicas() {
     int i;
-    printf("\n--- CATALOGO DE M�SICAS (%d itens) ---\n", totalMusicas);
+    printf("\n--- CATALOGO DE MÚSICAS (%d itens) ---\n", totalMusicas);
     if (totalMusicas == 0) {
         printf("Nenhuma musica cadastrada.\n");
         return;
@@ -128,13 +128,13 @@ void listarMusicas() {
         printf("Nome: %s\n", listaMusicas[i].nomeMusica);
         printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
         printf("Genero: %s\n", listaMusicas[i].generoMusica);
-        printf("Ano de lan�amento: %d\n", listaMusicas[i].anoLancamento);
+        printf("Ano de lançamento: %d\n", listaMusicas[i].anoLancamento);
         printf("------------------------------------\n");
     }
 }
 
 // ----------------------------------------------------------------------------
-// 7. SUBFUNÇÃO DE BUSCA TEXTUAL COM STRSTR
+// 7. SUBFUNﾃ�グ DE BUSCA TEXTUAL COM STRSTR
 // ----------------------------------------------------------------------------
 void buscarMusicaPorNome() {
     int i;
@@ -155,12 +155,12 @@ void buscarMusicaPorNome() {
         }
     }
     if (encontradas == 0) {
-        printf("[INFO] Nenhuma m�sica encontrada com o termo '%s'.\n", termo);
+        printf("[INFO] Nenhuma música encontrada com o termo '%s'.\n", termo);
     }
 }
 
 // ----------------------------------------------------------------------------
-// 8. EDIÇÃO NA MEMÓRIA SEGUIDA DE REESCRITA TOTAL DO CSV
+// 8. EDIﾃ�グ NA MEMﾃ迭IA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
 void editarMusica() {
     int id;
@@ -176,10 +176,10 @@ void editarMusica() {
         return;
     }
 
-    printf("\n--- EDITANDO M�SICA ---\n");
+    printf("\n--- EDITANDO MÚSICA ---\n");
     printf("Musica atual: %s\n", listaMusicas[pos].nomeMusica);
 
-    printf("Novo nome da m�sica: ");
+    printf("Novo nome da música: ");
     scanf(" %39[^\n]", listaMusicas[pos].nomeMusica);
 
     printf("Nova duracao em minutos: ");
@@ -197,7 +197,7 @@ void editarMusica() {
 }
 
 // ----------------------------------------------------------------------------
-// 9. REMOÇÃO FÍSICA NA MEMÓRIA SEGUIDA DE REESCRITA TOTAL DO CSV
+// 9. REMOﾃ�グ Fﾃ拘ICA NA MEMﾃ迭IA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
 void removerMusica() {
     int id;
@@ -221,20 +221,20 @@ void removerMusica() {
 }
 
 // ----------------------------------------------------------------------------
-// 10. SUBMENU DO MÓDULO DE MÚSICAS
+// 10. SUBMENU DO Mﾃ泥ULO DE Mﾃ售ICAS
 // ----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
     setlocale(LC_ALL, "Portuguese");
     do {
-        printf("\n--- [M�DULO 2: GEST�O DE M�SICAS (Vinicius)] ---\n");
-        printf("1. Cadastrar Nova M�sica / Faixa\n");
-        printf("2. Listar / Buscar M�sicas\n");
-        printf("3. Buscar M�sica pelo nome\n");
-        printf("4. Editar M�sica\n");
-        printf("5. Excluir M�sica\n");
+        printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Vinicius)] ---\n");
+        printf("1. Cadastrar Nova Musica / Faixa\n");
+        printf("2. Listar / Buscar Musicas\n");
+        printf("3. Buscar Música pelo nome\n");
+        printf("4. Editar Música\n");
+        printf("5. Excluir Música\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma op��o: ");
+        printf("Escolha uma opção: ");
         scanf("%d", &opcaoMusica);
 
         switch (opcaoMusica) {
@@ -257,7 +257,7 @@ void moduloMusicas() {
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] Op��o inv�lida no M�dulo de M�sicas!\n");
+                printf("\n[ERRO] Opção inválida no módulo de músicas!\n");
         }
     } while (opcaoMusica != 0);
 }
