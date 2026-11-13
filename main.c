@@ -66,6 +66,9 @@ int main() {
                 break;
             default:
                  printf("\n[ALERTA] Opção inválida! Digite um número de 0 a 4.\n");
+                 printf("Pressione <Enter> para continuar...");
+                 getchar();
+                 getchar();
         }
     } while (opcaoPrincipal != 0);
 
