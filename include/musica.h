@@ -4,12 +4,14 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <locale.h>
+#include "artistas.h"
 
 #define MAX_MUSICAS 50
 
 void listarAlbuns();
 int buscarAlbumPorId(int idProcurado);
+void listarArtistas();
+int buscarArtistaPorId(int idProcurado);
 
 // ----------------------------------------------------------------------------
 // 1. ESTRUTURA E ARRAYS GLOBAIS
@@ -21,12 +23,13 @@ struct Musica {
     char generoMusica[30];
     int anoLancamento;
     int idAlbum;
+    int idArtista;
 };
 struct Musica listaMusicas[MAX_MUSICAS];
 int totalMusicas = 0;
 
 // ----------------------------------------------------------------------------
-// 2. PERSISTﾃ劾CIA: Salva todo o vetor no arquivo musicas.csv
+// 2. PERSIST??CIA: Salva todo o vetor no arquivo musicas.csv
 // ----------------------------------------------------------------------------
 void salvarMusicasCSV() {
     int i;
@@ -37,19 +40,20 @@ void salvarMusicasCSV() {
         return;
     }
     for (i = 0; i < totalMusicas; i++) {
-        fprintf(arq, "%d;%s;%.2f;%s;%d;%d\n",
-		    listaMusicas[i].idMusica,
-            listaMusicas[i].nomeMusica,
-            listaMusicas[i].duracaoMinutos,
-            listaMusicas[i].generoMusica,
-            listaMusicas[i].anoLancamento,
-            listaMusicas[i].idAlbum);
-    }
-    fclose(arq);
+	    fprintf(arq, "%d;%s;%.2f;%s;%d;%d;%d\n",
+            listaMusicas[i].idMusica,
+			listaMusicas[i].nomeMusica,
+			listaMusicas[i].duracaoMinutos,
+			listaMusicas[i].generoMusica,
+			listaMusicas[i].anoLancamento,
+			listaMusicas[i].idArtista,
+			listaMusicas[i].idAlbum);
+	}
+	fclose(arq);
 }
 
 // ----------------------------------------------------------------------------
-// 3. PERSISTﾃ劾CIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
+// 3. PERSIST??CIA: Carrega os dados do arquivo musicas.csv ao abrir o programa
 // ----------------------------------------------------------------------------
 void carregarMusicasCSV() {
     FILE *arq = fopen("data/musicas.csv", "r");
@@ -61,21 +65,22 @@ void carregarMusicasCSV() {
     totalMusicas = 0;
 
     while (totalMusicas < MAX_MUSICAS &&
-           fscanf(arq, "%d;%39[^;\n];%f;%29[^;\n];%d;%d",
-                  &listaMusicas[totalMusicas].idMusica,
-                  listaMusicas[totalMusicas].nomeMusica,
-                  &listaMusicas[totalMusicas].duracaoMinutos,
-                  listaMusicas[totalMusicas].generoMusica,
-                  &listaMusicas[totalMusicas].anoLancamento,
-                  &listaMusicas[totalMusicas].idAlbum) == 6) {
+       fscanf(arq, "%d;%39[^;\n];%f;%29[^;\n];%d;%d;%d",
+              &listaMusicas[totalMusicas].idMusica,
+              listaMusicas[totalMusicas].nomeMusica,
+              &listaMusicas[totalMusicas].duracaoMinutos,
+              listaMusicas[totalMusicas].generoMusica,
+              &listaMusicas[totalMusicas].anoLancamento,
+              &listaMusicas[totalMusicas].idArtista,
+              &listaMusicas[totalMusicas].idAlbum) == 7) {
 
-        totalMusicas++;
-    }
+    totalMusicas++;
+}
 
     fclose(arq);
 }
 // ----------------------------------------------------------------------------
-// 4. FUNﾃ�グ CHAVE-MESTRA: Retorna o ﾃｭndice onde o ID estﾃ｡, ou -1 se nﾃ｣o existir
+// 4. FUN? ? CHAVE-MESTRA: Retorna o ??ndice onde o ID est??, ou -1 se n??o existir
 // ----------------------------------------------------------------------------
 int buscarIndiceMusica(int idProcurado) {
     int i;
@@ -86,17 +91,20 @@ int buscarIndiceMusica(int idProcurado) {
 }
 
 // ----------------------------------------------------------------------------
-// 5. SUBFUNﾃ�グ DE CADASTRO
+// 5. SUBFUN? ? DE CADASTRO
 // ----------------------------------------------------------------------------
 void cadastrarMusica() {
     int id;
     int idAlbum;
+    int idArtista;
+    int posArtista;
+    int c;
     if (totalMusicas >= MAX_MUSICAS) {
         printf("\n[ERRO] Limite de 50 musicas atingido!\n");
         return;
     }
 
-    printf("\n--- [CADASTRO DE NOVA Mﾃ售ICA] ---\n");
+    printf("\n--- [CADASTRO DE NOVA M??ICA] ---\n");
     printf("Digite o ID da nova musica: ");
     scanf("%d", &id);
 
@@ -106,67 +114,120 @@ void cadastrarMusica() {
     }
 
     listaMusicas[totalMusicas].idMusica = id;
-    printf("Nome da música: ");
+    printf("Nome da m�sica: ");
     scanf(" %39[^\n]", listaMusicas[totalMusicas].nomeMusica);
     printf("Duracao em minutos (ex: 3.5): ");
     scanf("%f", &listaMusicas[totalMusicas].duracaoMinutos);
     printf("Genero musical: ");
     scanf(" %29[^\n]", listaMusicas[totalMusicas].generoMusica);
-    printf("Ano de lançamento: ");
+    printf("Ano de lan�amento: ");
     scanf("%d", &listaMusicas[totalMusicas].anoLancamento);
-    printf("\n--- ALBUNS DISPONIVEIS ---\n");
-    
-    
-	listarAlbuns();
+   
+   printf("\n--- ARTISTAS DISPONIVEIS ---\n");
+   if (totalArtistas == 0) {
+    printf("[ERRO] Cadastre um artista primeiro!\n");
+    return;
+	}
+	listarArtistas();
+	
 	do {
-	    printf("\nDigite o ID do album (-1 para cancelar): ");
-		if (scanf("%d", &idAlbum) != 1) {
-		    printf("[ERRO] Digite apenas numeros!\n");
-			scanf("%*[^\n]");
-			getchar();
-			idAlbum = -2;
-			}
-        else if (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1) {
-            printf("[ERRO] Album nao encontrado!\n");
-		}
-	} while (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1);
-	    if (idAlbum == -1) {
+        printf("\nDigite o ID do artista (-1 para cancelar): ");
+
+        if (scanf("%d", &idArtista) != 1) {
+            printf("[ERRO] Digite apenas numeros!\n");
+
+            while ((c = getchar()) != '\n' && c != EOF) {
+        }
+
+            idArtista = -2;
+    }
+
+        if (idArtista == -1) {
             printf("Cadastro cancelado!\n");
-			return;
-			}
+            return;
+        }
+	
+	    posArtista = buscarArtistaPorId(idArtista);
+
+        if (posArtista == -1) {
+        printf("[ERRO] Artista nao encontrado!\n");
+		}
+        else if (cadastroArtistas[posArtista].ativo == 0) {
+            printf("[ERRO] Artista inativo! Escolha outro.\n");
+            posArtista = -1;
+    }
+
+    } while (posArtista == -1);
+
+    listaMusicas[totalMusicas].idArtista = idArtista;
+   
+   
+   
+   	printf("\n--- ALBUNS DISPONIVEIS ---\n");
+    listarAlbuns();
+
+    do {
+        printf("\nDigite o ID do album (0 para nenhum): ");
+
+        if (scanf("%d", &idAlbum) != 1) {
+            printf("[ERRO] Digite apenas numeros!\n");
+            while ((c = getchar()) != '\n' && c != EOF) {
+        }
+
+            idAlbum = -1;
+        }
+
+        if (idAlbum != 0 && buscarAlbumPorId(idAlbum) == -1) {
+            printf("[ERRO] Album nao encontrado!\n");
+    }
+
+    } while (idAlbum != 0 && buscarAlbumPorId(idAlbum) == -1);
 
     listaMusicas[totalMusicas].idAlbum = idAlbum;
-		
-		totalMusicas++;
-		salvarMusicasCSV();
-		
-		printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
-}
-		
 
+    totalMusicas++;
+    salvarMusicasCSV();
+
+    printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
+}
 // ----------------------------------------------------------------------------
-// 6. SUBFUNﾃ�グ DE LISTAGEM
+// 6. SUBFUN? ? DE LISTAGEM
 // ----------------------------------------------------------------------------
 void listarMusicas() {
     int i;
-    printf("\n--- CATALOGO DE MÚSICAS (%d itens) ---\n", totalMusicas);
+    printf("\n--- CATALOGO DE M�SICAS (%d itens) ---\n", totalMusicas);
     if (totalMusicas == 0) {
         printf("Nenhuma musica cadastrada.\n");
         return;
     }
     for (i = 0; i < totalMusicas; i++) {
-        printf("\nID: %d\n", listaMusicas[i].idMusica);
-        printf("Nome: %s\n", listaMusicas[i].nomeMusica);
-        printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
-        printf("Genero: %s\n", listaMusicas[i].generoMusica);
-        printf("Ano de lançamento: %d\n", listaMusicas[i].anoLancamento);
-        printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
-        printf("------------------------------------\n");
+    printf("\nID: %d\n", listaMusicas[i].idMusica);
+    printf("Nome: %s\n", listaMusicas[i].nomeMusica);
+    printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
+    printf("Genero: %s\n", listaMusicas[i].generoMusica);
+    printf("Ano: %d\n", listaMusicas[i].anoLancamento);
+    printf("ID do Artista: %d\n", listaMusicas[i].idArtista);
+
+    if (listaMusicas[i].idAlbum == 0) {
+        printf("Album: Nenhum (Single)\n");
     }
+    else {
+        printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
+    }
+
+    printf("------------------------------------\n");
+}
+        printf("ID do Artista: %d\n", listaMusicas[i].idArtista);
+		if (listaMusicas[i].idAlbum == 0) {
+            printf("Album: Nenhum (Single)\n");
+		}
+        else {
+            printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
+        }
 }
 
 // ----------------------------------------------------------------------------
-// 7. SUBFUNﾃ�グ DE BUSCA TEXTUAL COM STRSTR
+// 7. SUBFUN? ? DE BUSCA TEXTUAL COM STRSTR
 // ----------------------------------------------------------------------------
 void buscarMusicaPorNome() {
     int i;
@@ -183,26 +244,36 @@ void buscarMusicaPorNome() {
 			printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
 			printf("Genero: %s\n", listaMusicas[i].generoMusica);
 			printf("Ano de lancamento: %d\n", listaMusicas[i].anoLancamento);
-			printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
+			printf("ID do Artista: %d\n", listaMusicas[i].idArtista);
+			
+			if (listaMusicas[i].idAlbum == 0) {
+                printf("Album: Nenhum (Single)\n");
+            }
+            else {
+			    printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
+            }
 			printf("------------------------------------\n");
-			encontradas++;
+            encontradas++;
         }
     }
     if (encontradas == 0) {
-        printf("[INFO] Nenhuma música encontrada com o termo '%s'.\n", termo);
+        printf("[INFO] Nenhuma m�sica encontrada com o termo '%s'.\n", termo);
     }
 }
 
 // ----------------------------------------------------------------------------
-// 8. EDIﾃ�グ NA MEMﾃ迭IA SEGUIDA DE REESCRITA TOTAL DO CSV
+// 8. EDI? ? NA MEM??IA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
+
 void editarMusica() {
-    int id;
-    int pos;
-    int idAlbum;
+    int id, pos, idArtista, idAlbum, posArtista, c;
 
     printf("\nDigite o ID da musica que deseja EDITAR: ");
-    scanf("%d", &id);
+    if (scanf("%d", &id) != 1) {
+        printf("[ERRO] ID invalido!\n");
+        while ((c = getchar()) != '\n' && c != EOF) {}
+        return;
+    }
 
     pos = buscarIndiceMusica(id);
 
@@ -211,46 +282,83 @@ void editarMusica() {
         return;
     }
 
-    printf("\n--- EDITANDO MÚSICA ---\n");
+    printf("\n--- EDITANDO MUSICA ---\n");
     printf("Musica atual: %s\n", listaMusicas[pos].nomeMusica);
 
-    printf("Novo nome da música: ");
+    // Escolher artista obrigatorio
+    listarArtistas();
+
+    do {
+        printf("\nNovo ID do artista (-1 para cancelar): ");
+
+        if (scanf("%d", &idArtista) != 1) {
+            printf("[ERRO] Digite apenas numeros!\n");
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            idArtista = -2;
+        }
+
+        if (idArtista == -1) {
+            printf("Edicao cancelada!\n");
+            return;
+        }
+
+        posArtista = buscarArtistaPorId(idArtista);
+
+        if (posArtista == -1) {
+            printf("[ERRO] Artista nao encontrado!\n");
+        }
+        else if (cadastroArtistas[posArtista].ativo == 0) {
+            printf("[ERRO] Artista inativo!\n");
+            posArtista = -1;
+        }
+
+    } while (posArtista == -1);
+
+    // Escolher album opcional
+    listarAlbuns();
+
+    do {
+        printf("\nNovo ID do album (0 para nenhum, -1 para cancelar): ");
+
+        if (scanf("%d", &idAlbum) != 1) {
+            printf("[ERRO] Digite apenas numeros!\n");
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            idAlbum = -2;
+        }
+
+        if (idAlbum == -1) {
+            printf("Edicao cancelada!\n");
+            return;
+        }
+
+        if (idAlbum != 0 && buscarAlbumPorId(idAlbum) == -1) {
+            printf("[ERRO] Album nao encontrado!\n");
+        }
+
+    } while (idAlbum != 0 && buscarAlbumPorId(idAlbum) == -1);
+
+    printf("\nNovo nome: ");
     scanf(" %39[^\n]", listaMusicas[pos].nomeMusica);
 
-    printf("Nova duracao em minutos: ");
+    printf("Nova duracao: ");
     scanf("%f", &listaMusicas[pos].duracaoMinutos);
 
-    printf("Novo genero musical: ");
+    printf("Novo genero: ");
     scanf(" %29[^\n]", listaMusicas[pos].generoMusica);
 
-    printf("Novo ano de lancamento: ");
+    printf("Novo ano: ");
     scanf("%d", &listaMusicas[pos].anoLancamento);
-    
-    printf("\n--- ALBUNS DISPONIVEIS ---\n");
-	
-	listarAlbuns();
-	do {
-    printf("\nDigite o novo ID do album (-1 para cancelar): ");
-	    if (scanf("%d", &idAlbum) != 1) {
-            printf("[ERRO] Digite apenas numeros!\n");
-			scanf("%*[^\n]");
-			getchar();
-			idAlbum = -2;
-		}
-        else if (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1) {
-            printf("[ERRO] Album nao encontrado!\n");
-		}
 
-    } while (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1);
-	    if (idAlbum == -1) {
-        printf("Alteracao do album cancelada!\n");
-        return;
-	}
-	listaMusicas[pos].idAlbum = idAlbum;
-	salvarMusicasCSV();
+    listaMusicas[pos].idArtista = idArtista;
+    listaMusicas[pos].idAlbum = idAlbum;
+
+    salvarMusicasCSV();
+
+    printf("\n[SUCESSO] Musica atualizada!\n");
 }
+
 // ----------------------------------------------------------------------------
-// 9. REMOﾃ�グ Fﾃ拘ICA NA MEMﾃ迭IA SEGUIDA DE REESCRITA TOTAL DO CSV
+// 9. REMO? ? F??ICA NA MEM??IA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
 void removerMusica() {
     int id;
@@ -274,20 +382,20 @@ void removerMusica() {
 }
 
 // ----------------------------------------------------------------------------
-// 10. SUBMENU DO Mﾃ泥ULO DE Mﾃ售ICAS
+// 10. SUBMENU DO M??ULO DE M??ICAS
 // ----------------------------------------------------------------------------
 void moduloMusicas() {
     int opcaoMusica;
-    setlocale(LC_ALL, "Portuguese");
+
     do {
-        printf("\n--- [MÓDULO 2: GESTÃO DE MÚSICAS (Vinicius)] ---\n");
+        printf("\n--- [M�DULO 2: GEST�O DE M�SICAS (Vinicius)] ---\n");
         printf("1. Cadastrar Nova Musica / Faixa\n");
         printf("2. Listar / Buscar Musicas\n");
-        printf("3. Buscar Música pelo nome\n");
-        printf("4. Editar Música\n");
-        printf("5. Excluir Música\n");
+        printf("3. Buscar M�sica pelo nome\n");
+        printf("4. Editar M�sica\n");
+        printf("5. Excluir M�sica\n");
         printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma opção: ");
+        printf("Escolha uma op��o: ");
         scanf("%d", &opcaoMusica);
 
         switch (opcaoMusica) {
@@ -310,7 +418,7 @@ void moduloMusicas() {
                 printf("\nRetornando ao menu principal...\n");
                 break;
             default:
-                printf("\n[ERRO] Opção inválida no módulo de músicas!\n");
+                printf("\n[ERRO] Op��o inv�lida no m�dulo de m�sicas!\n");
         }
     } while (opcaoMusica != 0);
 }
