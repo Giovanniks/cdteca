@@ -181,7 +181,8 @@ void atualizarArtista() {
 	int idBusca;
 	printf("\n--- [ATUALIZAR ARTISTA] ---\n");
 	printf("Digite o ID do artista: ");
-	if (buscarArtistaPorId(idBusca)) {
+	if (scanf("%d", &idBusca) != 1) {
+		scanf("%*[^\n]"); // descarta a entrada inválida
 		printf("[ERRO] ID inválido!\n\n");
 		return;
 	}
@@ -225,9 +226,10 @@ void atualizarArtista() {
 
 	int status;
 	printf("Status (1 = Ativo, 0 = Inativo): ");
-	if (buscarArtistaPorId(status) && (status == 0 || status == 1)) {
+	if (scanf("%d", &status) == 1 && (status == 0 || status == 1)) {
 		cadastroArtistas[pos].ativo = status;
 	} else {
+		scanf("%*[^\n]"); // limpa o buffer se a entrada for inválida
 		printf("[INFO] Status inválido, mantido o valor anterior.\n");
 	}
 
@@ -240,7 +242,8 @@ void desativarArtista() {
 	int idBusca;
 	printf("\n--- [DESATIVAR ARTISTA] ---\n");
 	printf("Digite o ID do artista: ");
-	if (buscarArtistaPorId(idBusca)) {
+	if (scanf("%d", &idBusca) != 1) {
+		scanf("%*[^\n]");
 		printf("[ERRO] ID inválido!\n\n");
 		return;
 	}
@@ -268,7 +271,8 @@ void removerArtista() {
 
 	printf("\n--- [REMOVER ARTISTA] ---\n");
 	printf("Digite o ID do artista: ");
-	if (buscarArtistaPorId(idBusca)) {
+	if (scanf("%d", &idBusca) != 1) {
+		scanf("%*[^\n]");
 		printf("[ERRO] ID inválido!\n\n");
 		return;
 	}
@@ -307,7 +311,6 @@ void removerArtista() {
 void moduloArtistas() {
 	int opcaoArtista;
 	setlocale(LC_ALL, "Portuguese");
-	carregarArtistasCSV();
 
 	do {
 		printf("\n--- [MÓDULO 3: CADASTRO DE ARTISTAS (Alan)] ---\n");
@@ -319,7 +322,10 @@ void moduloArtistas() {
 		printf("6. Remover Artista\n");
 		printf("0. Voltar ao Menu Principal\n");
 		printf("Escolha uma ação: ");
-		scanf("%d", &opcaoArtista);
+		if (scanf("%d", &opcaoArtista) != 1) {
+			scanf("%*[^\n]");
+			opcaoArtista = -1; // cai no default
+		}
 
 		switch (opcaoArtista) {
 			case 1:
@@ -350,3 +356,4 @@ void moduloArtistas() {
 }
 
 #endif
+
