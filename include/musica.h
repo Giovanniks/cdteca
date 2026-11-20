@@ -8,6 +8,9 @@
 
 #define MAX_MUSICAS 50
 
+void listarAlbuns();
+int buscarAlbumPorId(int idProcurado);
+
 // ----------------------------------------------------------------------------
 // 1. ESTRUTURA E ARRAYS GLOBAIS
 // ----------------------------------------------------------------------------
@@ -34,12 +37,13 @@ void salvarMusicasCSV() {
         return;
     }
     for (i = 0; i < totalMusicas; i++) {
-        fprintf(arq, "%d;%s;%.2f;%s;%d\n",
-                listaMusicas[i].idMusica,
-                listaMusicas[i].nomeMusica,
-                listaMusicas[i].duracaoMinutos,
-                listaMusicas[i].generoMusica,
-                listaMusicas[i].anoLancamento);
+        fprintf(arq, "%d;%s;%.2f;%s;%d;%d\n",
+		    listaMusicas[i].idMusica,
+            listaMusicas[i].nomeMusica,
+            listaMusicas[i].duracaoMinutos,
+            listaMusicas[i].generoMusica,
+            listaMusicas[i].anoLancamento,
+            listaMusicas[i].idAlbum);
     }
     fclose(arq);
 }
@@ -49,23 +53,27 @@ void salvarMusicasCSV() {
 // ----------------------------------------------------------------------------
 void carregarMusicasCSV() {
     FILE *arq = fopen("data/musicas.csv", "r");
-    if (arq == NULL) return; // Se nﾃ｣o existir arquivo ainda, mantem totalMusicas = 0
 
-    totalMusicas = 0; // Reseta o contador para preencher do zero a partir do arquivo
-    
-    // Leitura ajustada para nﾃ｣o quebrar no final da linha
+    if (arq == NULL) {
+        return;
+    }
+
+    totalMusicas = 0;
+
     while (totalMusicas < MAX_MUSICAS &&
-           fscanf(arq, "%d;%39[^;\n];%f;%39[^;\n];%d\n",
+           fscanf(arq, "%d;%39[^;\n];%f;%29[^;\n];%d;%d",
                   &listaMusicas[totalMusicas].idMusica,
                   listaMusicas[totalMusicas].nomeMusica,
                   &listaMusicas[totalMusicas].duracaoMinutos,
                   listaMusicas[totalMusicas].generoMusica,
-                  &listaMusicas[totalMusicas].anoLancamento) == 5) {
+                  &listaMusicas[totalMusicas].anoLancamento,
+                  &listaMusicas[totalMusicas].idAlbum) == 6) {
+
         totalMusicas++;
     }
+
     fclose(arq);
 }
-
 // ----------------------------------------------------------------------------
 // 4. FUNﾃ�グ CHAVE-MESTRA: Retorna o ﾃｭndice onde o ID estﾃ｡, ou -1 se nﾃ｣o existir
 // ----------------------------------------------------------------------------
@@ -82,6 +90,7 @@ int buscarIndiceMusica(int idProcurado) {
 // ----------------------------------------------------------------------------
 void cadastrarMusica() {
     int id;
+    int idAlbum;
     if (totalMusicas >= MAX_MUSICAS) {
         printf("\n[ERRO] Limite de 50 musicas atingido!\n");
         return;
@@ -105,14 +114,35 @@ void cadastrarMusica() {
     scanf(" %29[^\n]", listaMusicas[totalMusicas].generoMusica);
     printf("Ano de lançamento: ");
     scanf("%d", &listaMusicas[totalMusicas].anoLancamento);
-
+    printf("\n--- ALBUNS DISPONIVEIS ---\n");
     
+    
+	listarAlbuns();
+	do {
+	    printf("\nDigite o ID do album (-1 para cancelar): ");
+		if (scanf("%d", &idAlbum) != 1) {
+		    printf("[ERRO] Digite apenas numeros!\n");
+			scanf("%*[^\n]");
+			getchar();
+			idAlbum = -2;
+			}
+        else if (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1) {
+            printf("[ERRO] Album nao encontrado!\n");
+		}
+	} while (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1);
+	    if (idAlbum == -1) {
+            printf("Cadastro cancelado!\n");
+			return;
+			}
 
-    totalMusicas++;
-    salvarMusicasCSV();
-
-    printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
+    listaMusicas[totalMusicas].idAlbum = idAlbum;
+		
+		totalMusicas++;
+		salvarMusicasCSV();
+		
+		printf("\n[SUCESSO] Musica cadastrada com sucesso!\n");
 }
+		
 
 // ----------------------------------------------------------------------------
 // 6. SUBFUNﾃ�グ DE LISTAGEM
@@ -130,6 +160,7 @@ void listarMusicas() {
         printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
         printf("Genero: %s\n", listaMusicas[i].generoMusica);
         printf("Ano de lançamento: %d\n", listaMusicas[i].anoLancamento);
+        printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
         printf("------------------------------------\n");
     }
 }
@@ -147,12 +178,14 @@ void buscarMusicaPorNome() {
     
     for (i = 0; i < totalMusicas; i++) {
         if (strstr(listaMusicas[i].nomeMusica, termo) != NULL) {
-            printf(" -> Encontrada: [%d] %s (%.2f min) - Faixa %d\n",
-                   listaMusicas[i].idMusica, 
-                   listaMusicas[i].nomeMusica, 
-                   listaMusicas[i].generoMusica,
-                   listaMusicas[i].anoLancamento);
-            encontradas++;
+            printf("\nID: %d\n", listaMusicas[i].idMusica);
+			printf("Nome: %s\n", listaMusicas[i].nomeMusica);
+			printf("Duracao: %.2f min\n", listaMusicas[i].duracaoMinutos);
+			printf("Genero: %s\n", listaMusicas[i].generoMusica);
+			printf("Ano de lancamento: %d\n", listaMusicas[i].anoLancamento);
+			printf("ID do Album: %d\n", listaMusicas[i].idAlbum);
+			printf("------------------------------------\n");
+			encontradas++;
         }
     }
     if (encontradas == 0) {
@@ -166,6 +199,7 @@ void buscarMusicaPorNome() {
 void editarMusica() {
     int id;
     int pos;
+    int idAlbum;
 
     printf("\nDigite o ID da musica que deseja EDITAR: ");
     scanf("%d", &id);
@@ -191,12 +225,30 @@ void editarMusica() {
 
     printf("Novo ano de lancamento: ");
     scanf("%d", &listaMusicas[pos].anoLancamento);
+    
+    printf("\n--- ALBUNS DISPONIVEIS ---\n");
+	
+	listarAlbuns();
+	do {
+    printf("\nDigite o novo ID do album (-1 para cancelar): ");
+	    if (scanf("%d", &idAlbum) != 1) {
+            printf("[ERRO] Digite apenas numeros!\n");
+			scanf("%*[^\n]");
+			getchar();
+			idAlbum = -2;
+		}
+        else if (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1) {
+            printf("[ERRO] Album nao encontrado!\n");
+		}
 
-    salvarMusicasCSV();
-
-    printf("\n[SUCESSO] Musica atualizada com sucesso!\n");
+    } while (idAlbum != -1 && buscarAlbumPorId(idAlbum) == -1);
+	    if (idAlbum == -1) {
+        printf("Alteracao do album cancelada!\n");
+        return;
+	}
+	listaMusicas[pos].idAlbum = idAlbum;
+	salvarMusicasCSV();
 }
-
 // ----------------------------------------------------------------------------
 // 9. REMOﾃ�グ Fﾃ拘ICA NA MEMﾃ迭IA SEGUIDA DE REESCRITA TOTAL DO CSV
 // ----------------------------------------------------------------------------
