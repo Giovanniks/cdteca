@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <locale.h>
 
 #include "musica.h"
 
@@ -233,6 +234,7 @@ void relatorioMusicaMaisOuvida() {
 
 void moduloCurtidasRelatorios() {
     int opcaoCurtida;
+    setlocale(LC_ALL, "Portuguese");
     do {
         printf("\n--- [MÓDULO 4: CURTIDAS E RELATÓRIOS (Giovanni)] ---\n");
         printf("1. Registar Música Curtida / Favorita\n");

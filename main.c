@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <locale.h>
 
-#include "include/albuns.h"
-#include "include/musica.h"
 #include "include/artistas.h"
+#include "include/musica.h"
+#include "include/albuns.h"
 #include "include/curtidas.h"
 
 void exibirCabecalho() {
     printf("\n======================================================\n");
-    printf("         CDTECA PESSOAL - MINHA COLE√á√ÉO MUSICAL       \n");
+    printf("         CDTECA PESSOAL - MINHA COLE«√O MUSICAL       \n");
     printf("======================================================\n");
 }
-
 
 void limparTela() {
     #ifdef _WIN32
@@ -22,30 +22,28 @@ void limparTela() {
     #endif
 }
 
-
 int main() {
     setlocale(LC_ALL, "Portuguese");
     
-    carregarAlbunsCSV();
-    carregarMusicasCSV();
     carregarArtistasCSV();
+    carregarMusicasCSV();
+    carregarAlbunsCSV();
     carregarCurtidasCSV();
 
-    int opcaoPrincipal;
+    int opcaoPrincipal = 0;
 
     do {
-    	
-    	limparTela();
-    	
+        limparTela();
+
         exibirCabecalho();
         printf("SELECIONE A PERSPECTIVA DO SISTEMA:\n");
-        printf("1. M√≥dulo de √Ålbuns / CDs (Giovanni)\n");
-        printf("2. M√≥dulo de M√∫sicas / Faixas (Vinicius)\n");
-        printf("3. M√≥dulo de Artistas / Bandas (Alan)\n");
-        printf("4. M√≥dulo de Curtidas e Relat√≥rios (Giovanni)\n");
+        printf("1. MÛdulo de ¡lbuns / CDs (Giovanni)\n");
+        printf("2. MÛdulo de M˙sicas / Faixas (Vinicius)\n");
+        printf("3. MÛdulo de Artistas / Bandas (Alan)\n");
+        printf("4. MÛdulo de Curtidas e RelatÛrios (Giovanni)\n");
         printf("0. Encerrar o Sistema\n");
         printf("------------------------------------------------------\n");
-        printf("Digite a op√ß√£o desejada: ");
+        printf("Digite a opÁ„o desejada: ");
         scanf("%d", &opcaoPrincipal);
 
         switch (opcaoPrincipal) {
@@ -62,13 +60,13 @@ int main() {
                 moduloCurtidasRelatorios();
                 break;
             case 0:
-                printf("\nEncerrando o sistema CDteca Pessoal... At√© logo!\n");
+                printf("\nEncerrando o sistema CDteca Pessoal... AtÈ logo!\n");
                 break;
             default:
-                 printf("\n[ALERTA] Op√ß√£o inv√°lida! Digite um n√∫mero de 0 a 4.\n");
-                 printf("Pressione <Enter> para continuar...");
-                 getchar();
-                 getchar();
+                printf("\n[ALERTA] OpÁ„o inv·lida! Digite um n˙mero de 0 a 4.\n");
+                printf("Pressione <Enter> para continuar...");
+                getchar();
+                getchar();
         }
     } while (opcaoPrincipal != 0);
 

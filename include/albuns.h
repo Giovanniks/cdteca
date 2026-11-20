@@ -6,6 +6,9 @@
 #include <string.h>
 #include <locale.h>
 
+#include "artistas.h"
+#include "musica.h"
+
 #define MAX_ALBUNS 50
 
 struct Album {
@@ -14,6 +17,7 @@ struct Album {
 	int anoLancamento;
 	char genero[30];
 	int disponivelNaColecao; // 1 para sim, 0 para não
+	int idArtista;
 };
 
 struct Album catalogoAlbuns[MAX_ALBUNS];
@@ -22,18 +26,19 @@ struct Album catalogoAlbuns[MAX_ALBUNS];
 // Salva tudo dentro do CSV
 void salvarAlbunsCSV() {
 	int i;
-	FILE *arq = fopen("data/albuns.csv", "w"); // w exclui tudo e regrava novamente.
+	FILE *arq = fopen("data/albuns.csv", "w"); // w exclui tudo e regrava novamente
 	if (arq == NULL) {
 		printf("[ERRO] Não foi possivel gravar o arquivo albuns.csv!\n");
 		return;
 	}
 	for (i = 0; i < totalAlbuns; i++) {
-		fprintf(arq, "%d;%s;%d;%s;%d\n",
+		fprintf(arq, "%d;%s;%d;%s;%d;%d\n",
 		catalogoAlbuns[i].idAlbum,
 		catalogoAlbuns[i].tituloAlbum,
 		catalogoAlbuns[i].anoLancamento,
 		catalogoAlbuns[i].genero,
-		catalogoAlbuns[i].disponivelNaColecao);
+		catalogoAlbuns[i].disponivelNaColecao,
+		catalogoAlbuns[i].idArtista);
 	}
 	fclose(arq);
 }
@@ -46,12 +51,13 @@ void carregarAlbunsCSV() {
 	
 	totalAlbuns = 0;
     while (totalAlbuns < MAX_ALBUNS &&
-           fscanf(arq, "%d;%49[^;];%d;%29[^;];%d\n",
+           fscanf(arq, "%d;%49[^;];%d;%29[^;];%d;%d\n",
                   &catalogoAlbuns[totalAlbuns].idAlbum,
                   catalogoAlbuns[totalAlbuns].tituloAlbum,
                   &catalogoAlbuns[totalAlbuns].anoLancamento,
                   catalogoAlbuns[totalAlbuns].genero,
-                  &catalogoAlbuns[totalAlbuns].disponivelNaColecao) == 5) {
+                  &catalogoAlbuns[totalAlbuns].disponivelNaColecao,
+				  &catalogoAlbuns[totalAlbuns].idArtista) == 6) {
         totalAlbuns++;
     }
     fclose(arq);
@@ -107,6 +113,56 @@ void cadastrarAlbum() {
         return;
     }
     catalogoAlbuns[totalAlbuns].idAlbum = idTemp;
+    
+    int validacaoArtista;
+    int idArtistaVinculado = 0;
+    
+do {
+    printf("O artista ja existe? (1 - Sim / 0 - Nao): ");
+    if (scanf("%d", &validacaoArtista) != 1) {
+        scanf("%*[^\n]"); // descarta o que nao for numero
+        getchar();       
+        validacaoArtista = -1;
+    }
+
+    if (validacaoArtista != 1 && validacaoArtista != 0) {
+        printf("[ALERTA] Digite apenas 1 para Sim ou 0 para Nao!\n");
+    }
+} while (validacaoArtista != 1 && validacaoArtista != 0);
+
+if (validacaoArtista == 0 ) {
+	int totalAntes = totalArtistas;
+	cadastrarArtista();
+	
+	if (totalArtistas > totalAntes) {
+        int posNovoArt = totalArtistas - 1;
+        idArtistaVinculado = cadastroArtistas[posNovoArt].idArtista;
+        cadastroArtistas[posNovoArt].quantidadeAlbuns++;
+        salvarArtistasCSV();
+    }
+        
+} else {
+	listarArtistas();
+	if (totalArtistas == 0) {
+		printf("[ERRO] Nao ha artistas cadastrados para vincular!\n\n");
+		return;
+	}
+	
+	int idBusca;
+	printf("Digite o ID do artista deste album: ");
+    if (scanf("%d", &idBusca) != 1 || buscarArtistaPorId(idBusca) == -1) {
+        scanf("%*[^\n]");
+        printf("[ERRO] Artista com ID %d nao encontrado!\n\n", idBusca);
+        return;
+    }
+    
+    idArtistaVinculado = idBusca;
+    int posArt = buscarArtistaPorId(idArtistaVinculado);
+    cadastroArtistas[posArt].quantidadeAlbuns++;
+    salvarArtistasCSV();
+}
+
+catalogoAlbuns[totalAlbuns].idArtista = idArtistaVinculado;
 
     printf("Ano de Lançamento: ");
     scanf("%d", &catalogoAlbuns[totalAlbuns].anoLancamento);
@@ -122,22 +178,45 @@ void cadastrarAlbum() {
 
 //Catálogo de Albuns
 void listarAlbuns() {
-	int i;
+	int i, j;
 	printf("\n-- CATÁLOGO DE ÁLBUNS (%d itens) --\n", totalAlbuns);
 	if (totalAlbuns == 0) {
 		printf("Nenhum Álbum Cadastrado ainda.\n\n");
 		return;
 	}
-	
+
 	for (i = 0; i < totalAlbuns; i++) {
-        printf("ID: %d | Título: %s | Ano: %d | Gênero: %s | Status: %s\n\n",
-               catalogoAlbuns[i].idAlbum,
-               catalogoAlbuns[i].tituloAlbum,
-               catalogoAlbuns[i].anoLancamento,
-               catalogoAlbuns[i].genero,
-               catalogoAlbuns[i].disponivelNaColecao == 1 ? "Disponível" : "Indisponível");
-    }
-	
+		int posArt = buscarArtistaPorId(catalogoAlbuns[i].idArtista);
+		char nomeArt[40] = "Desconhecido";
+		if (posArt != -1) {
+			strcpy(nomeArt, cadastroArtistas[posArt].nomeArtista);
+		}
+
+		printf("ID: %d | Título: %s | Artista: %s | Ano: %d | Gênero: %s | Status: %s\n\n",
+		       catalogoAlbuns[i].idAlbum,
+		       catalogoAlbuns[i].tituloAlbum,
+		       nomeArt,
+		       catalogoAlbuns[i].anoLancamento,
+		       catalogoAlbuns[i].genero,
+		       catalogoAlbuns[i].disponivelNaColecao == 1 ? "Disponível" : "Indisponível");
+
+		int temMusica = 0;
+		printf("   Músicas do álbum:\n");
+		for (j = 0; j < totalMusicas; j++) {
+			if (listaMusicas[j].idAlbum == catalogoAlbuns[i].idAlbum) {
+				printf("     - [%d] %s (%.2f min)\n",
+				       listaMusicas[j].idMusica,
+				       listaMusicas[j].nomeMusica,
+				       listaMusicas[j].duracaoMinutos);
+				temMusica = 1;
+			}
+		}
+
+		if (!temMusica) {
+			printf("     (Nenhuma música vinculada a este álbum)\n\n");
+		}
+		printf("--------------------------------------------------\n");
+	}
 }
 
 //Buscar album por nome

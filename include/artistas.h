@@ -4,300 +4,349 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <locale.h>
 
 #define MAX_ARTISTAS 50
 
-
 struct Artista {
-    int idArtista;
-    char nomeArtista[40];
-    char paisOrigem[30];
-    int quantidadeAlbuns;
-    int ativo; // 1 para ativo, 0 para inativo
+	int idArtista;
+	char nomeArtista[40];
+	char paisOrigem[30];
+	int quantidadeAlbuns;
+	int ativo; // 1 para ativo, 0 para inativo
 };
 
 struct Artista cadastroArtistas[MAX_ARTISTAS];
 int totalArtistas = 0;
 int proximoIdArtista = 1;
 
-// L√™ um inteiro (n√£o trava se o usu√°rio digitar letras)
-int lerInteiroArtista(int *valor) {
-    if (scanf("%d", valor) != 1) {
-        while (getchar() != '\n');
-        return 0;
-    }
-    return 1;
-}
 
 
-// Salva todos os artistas no CSV
+// Salva tudo dentro do CSV
 void salvarArtistasCSV() {
-    int i;
-    FILE *arq = fopen("data/artistas.csv", "w"); // w apaga tudo e regrava
-if (arq == NULL) {
-    printf("[ERRO] N√£o foi poss√≠vel salvar o arquivo artistas.csv!\n");
-    return;
+	int i;
+	FILE *arq = fopen("data/artistas.csv", "w"); // w exclui tudo e regrava novamente
+	if (arq == NULL) {
+		printf("[ERRO] N„o foi possÌvel gravar o arquivo artistas.csv!\n");
+		return;
+	}
+	for (i = 0; i < totalArtistas; i++) {
+		fprintf(arq, "%d;%s;%s;%d;%d\n",
+		cadastroArtistas[i].idArtista,
+		cadastroArtistas[i].nomeArtista,
+		cadastroArtistas[i].paisOrigem,
+		cadastroArtistas[i].quantidadeAlbuns,
+		cadastroArtistas[i].ativo);
+	}
+	fclose(arq);
 }
 
-    fprintf(arq, "idArtista;nomeArtista;paisOrigem;quantidadeAlbuns;ativo\n");
-    for (i = 0; i < totalArtistas; i++) {
-        fprintf(arq, "%d;%s;%s;%d;%d\n",
-                cadastroArtistas[i].idArtista,
-                cadastroArtistas[i].nomeArtista,
-                cadastroArtistas[i].paisOrigem,
-                cadastroArtistas[i].quantidadeAlbuns,
-                cadastroArtistas[i].ativo);
-    }
-    fclose(arq);
-}
-
-// Carrega os artistas do CSV, se o arquivo existir
+// Carrega os artistas do arquivo se tiver
 void carregarArtistasCSV() {
-    FILE *arq = fopen("data/artistas.csv", "r");
-    if (arq == NULL) return; // primeira execu√ß√£o: inicia vazio
+	FILE *arq = fopen("data/artistas.csv", "r");
+	if (arq == NULL) return; // inicia vazio caso n„o tenha arquivo
 
-    char linha[200];
-    fgets(linha, sizeof(linha), arq); // pula o cabe√ßalho
-
-    totalArtistas = 0;
-    proximoIdArtista = 1;
-
-    while (totalArtistas < MAX_ARTISTAS && fgets(linha, sizeof(linha), arq) != NULL) {
-        struct Artista a;
-        if (sscanf(linha, "%d;%39[^;];%29[^;];%d;%d",
-                   &a.idArtista, a.nomeArtista, a.paisOrigem,
-                   &a.quantidadeAlbuns, &a.ativo) == 5) {
-            cadastroArtistas[totalArtistas++] = a;
-            if (a.idArtista >= proximoIdArtista) {
-                proximoIdArtista = a.idArtista + 1;
-            }
-        }
-    }
-    fclose(arq);
+	totalArtistas = 0;
+	proximoIdArtista = 1;
+	while (totalArtistas < MAX_ARTISTAS &&
+	       fscanf(arq, "%d;%39[^;];%29[^;];%d;%d\n",
+	              &cadastroArtistas[totalArtistas].idArtista,
+	              cadastroArtistas[totalArtistas].nomeArtista,
+	              cadastroArtistas[totalArtistas].paisOrigem,
+	              &cadastroArtistas[totalArtistas].quantidadeAlbuns,
+	              &cadastroArtistas[totalArtistas].ativo) == 5) {
+		if (cadastroArtistas[totalArtistas].idArtista >= proximoIdArtista) {
+			proximoIdArtista = cadastroArtistas[totalArtistas].idArtista + 1;
+		}
+		totalArtistas++;
+	}
+	fclose(arq);
 }
 
-/* ---------- Buscas ---------- */
-
-// Retorna a posi√ß√£o do artista pelo nome, ou -1 se n√£o existir
+// Procura e vÍ se o artista existe pelo nome, se existir passa a posiÁ„o.
 int buscarArtistaPorNome(char *nomeProcurado) {
-    int i;
-    for (i = 0; i < totalArtistas; i++) {
-        if (strcasecmp(cadastroArtistas[i].nomeArtista, nomeProcurado) == 0) {
-            return i;
-        }
-    }
-    return -1;
+	int i;
+	for (i = 0; i < totalArtistas; i++) {
+		if (strcasecmp(cadastroArtistas[i].nomeArtista, nomeProcurado) == 0) {
+			return i;
+		}
+	}
+	return -1;
 }
 
-// Retorna a posi√ß√£o do artista pelo ID, ou -1 se n√£o existir
+// Validador de ID
 int buscarArtistaPorId(int idProcurado) {
-    int i;
-    for (i = 0; i < totalArtistas; i++) {
-        if (cadastroArtistas[i].idArtista == idProcurado) {
-            return i;
-        }
-    }
-    return -1;
+	int i;
+	for (i = 0; i < totalArtistas; i++) {
+		if (cadastroArtistas[i].idArtista == idProcurado) {
+			return i;
+		}
+	}
+	return -1; // N„o existe
 }
 
-/* ---------- Opera√ß√µes ---------- */
-
-// Cadastrar artista 
+// Cadastrar artista contendo trava de nome repetido
 void cadastrarArtista() {
-    if (totalArtistas >= MAX_ARTISTAS) {
-        printf("\n[ERRO] Limite de %d artistas atingido!\n\n", MAX_ARTISTAS);
-        return;
-    }
+	if (totalArtistas >= MAX_ARTISTAS) {
+		printf("\n[ERRO] Limite de %d artistas atingido!\n\n", MAX_ARTISTAS);
+		return;
+	}
 
-    char nomeTemp[40];
-    printf("\n--- [CADASTRO DE NOVO ARTISTA] ---\n");
-    printf("Nome do Artista: ");
-    scanf(" %39[^\n]", nomeTemp);
+	char nomeTemp[40];
+	printf("\n--- [CADASTRO DE NOVO ARTISTA] ---\n");
+	printf("Nome do Artista: ");
+	scanf(" %39[^\n]", nomeTemp);
 
-    if (strchr(nomeTemp, ';') != NULL) {
-        printf("[ERRO] O nome n√£o pode conter o caractere ';'!\n\n");
-        return;
-    }
+	if (strchr(nomeTemp, ';') != NULL) {
+		printf("[ERRO] O nome n„o pode conter o caractere ';'!\n\n");
+		return;
+	}
 
-    if (buscarArtistaPorNome(nomeTemp) != -1) {
-        printf("[ERRO] J√° existe um artista cadastrado com o nome \"%s\"!\n\n", nomeTemp);
-        return;
-    }
+	if (buscarArtistaPorNome(nomeTemp) != -1) {
+		printf("[ERRO] J· existe um artista cadastrado com o nome \"%s\"!\n\n", nomeTemp);
+		return;
+	}
 
-    strcpy(cadastroArtistas[totalArtistas].nomeArtista, nomeTemp);
-    cadastroArtistas[totalArtistas].idArtista = proximoIdArtista;
+	strcpy(cadastroArtistas[totalArtistas].nomeArtista, nomeTemp);
+	cadastroArtistas[totalArtistas].idArtista = proximoIdArtista;
 
-    printf("Pa√≠s de origem: ");
-    scanf(" %29[^\n]", cadastroArtistas[totalArtistas].paisOrigem);
+	printf("PaÌs de origem: ");
+	scanf(" %29[^\n]", cadastroArtistas[totalArtistas].paisOrigem);
 
-    int qtd;
-    do {
-        printf("Quantidade de √°lbuns: ");
-        if (!lerInteiroArtista(&qtd)) {
-            qtd = -1;
-        }
-        if (qtd < 0) {
-            printf("[ERRO] Digite um n√∫mero v√°lido (n√£o negativo)!\n");
-        }
-    } while (qtd < 0);
+	if (strchr(cadastroArtistas[totalArtistas].paisOrigem, ';') != NULL) {
+		printf("[ERRO] O paÌs n„o pode conter o caractere ';'!\n\n");
+		return;
+	}
+	
+	cadastroArtistas[totalArtistas].quantidadeAlbuns = 0;
 
-    cadastroArtistas[totalArtistas].quantidadeAlbuns = qtd;
-    cadastroArtistas[totalArtistas].ativo = 1;
+	cadastroArtistas[totalArtistas].ativo = 1;
 
-    printf("\n[SUCESSO] Artista \"%s\" cadastrado com ID %d!\n\n",
-           cadastroArtistas[totalArtistas].nomeArtista,
-           cadastroArtistas[totalArtistas].idArtista);
+	printf("\n[SUCESSO] Artista \"%s\" cadastrado com ID %d!\n\n",
+	       cadastroArtistas[totalArtistas].nomeArtista,
+	       cadastroArtistas[totalArtistas].idArtista);
 
-    totalArtistas++;
-    proximoIdArtista++;
-    salvarArtistasCSV();
+	totalArtistas++;
+	proximoIdArtista++;
+	salvarArtistasCSV();
 }
 
-// Lista todos os artistas
+// Lista de artistas
 void listarArtistas() {
-    int i;
-    printf("\n--- [LISTA DE ARTISTAS] (%d itens) ---\n", totalArtistas);
-    if (totalArtistas == 0) {
-        printf("Nenhum artista cadastrado ainda.\n\n");
-        return;
-    }
+	int i;
+	printf("\n--- [LISTA DE ARTISTAS] (%d itens) ---\n", totalArtistas);
+	if (totalArtistas == 0) {
+		printf("Nenhum artista cadastrado ainda.\n\n");
+		return;
+	}
 
-    for (i = 0; i < totalArtistas; i++) {
-        printf("ID: %d | Nome: %s | Pa√≠s: %s | √Ålbuns: %d | Status: %s\n\n",
-               cadastroArtistas[i].idArtista,
-               cadastroArtistas[i].nomeArtista,
-               cadastroArtistas[i].paisOrigem,
-               cadastroArtistas[i].quantidadeAlbuns,
-               cadastroArtistas[i].ativo == 1 ? "Ativo" : "Inativo");
-    }
+	for (i = 0; i < totalArtistas; i++) {
+		printf("ID: %d | Nome: %s | PaÌs: %s | ¡lbuns: %d | Status: %s\n\n",
+		       cadastroArtistas[i].idArtista,
+		       cadastroArtistas[i].nomeArtista,
+		       cadastroArtistas[i].paisOrigem,
+		       cadastroArtistas[i].quantidadeAlbuns,
+		       cadastroArtistas[i].ativo == 1 ? "Ativo" : "Inativo");
+	}
+}
+
+// Buscar artista por parte do nome
+void buscarArtistaPorNomeParcial() {
+	int i;
+	char termo[40];
+	printf("\n--- [BUSCAR ARTISTA POR NOME] ---\n");
+	printf("Digite parte do nome do artista: ");
+	scanf(" %39[^\n]", termo);
+
+	int encontrados = 0;
+	for (i = 0; i < totalArtistas; i++) {
+		if (strstr(cadastroArtistas[i].nomeArtista, termo) != NULL) {
+			printf(" -> Encontrado: [%d] %s (%s) - %d ·lbuns - %s\n",
+			       cadastroArtistas[i].idArtista,
+			       cadastroArtistas[i].nomeArtista,
+			       cadastroArtistas[i].paisOrigem,
+			       cadastroArtistas[i].quantidadeAlbuns,
+			       cadastroArtistas[i].ativo == 1 ? "Ativo" : "Inativo");
+			encontrados++;
+		}
+	}
+	if (encontrados == 0) {
+		printf("[INFO] Nenhum artista encontrado com o termo \"%s\".\n\n", termo);
+	}
 }
 
 // Atualizar dados do artista
 void atualizarArtista() {
-    int idBusca;
-    printf("\n--- [ATUALIZAR ARTISTA] ---\n");
-    printf("Digite o ID do artista: ");
-    if (!lerInteiroArtista(&idBusca)) {
-        printf("[ERRO] ID inv√°lido!\n\n");
-        return;
-    }
+	int idBusca;
+	printf("\n--- [ATUALIZAR ARTISTA] ---\n");
+	printf("Digite o ID do artista: ");
+	if (buscarArtistaPorId(idBusca)) {
+		printf("[ERRO] ID inv·lido!\n\n");
+		return;
+	}
 
-    int pos = buscarArtistaPorId(idBusca);
-    if (pos == -1) {
-        printf("\n[ERRO] Artista com ID %d n√£o encontrado!\n\n", idBusca);
-        return;
-    }
+	int pos = buscarArtistaPorId(idBusca);
+	if (pos == -1) {
+		printf("\n[ERRO] Artista com ID %d n„o encontrado!\n\n", idBusca);
+		return;
+	}
 
-    printf("\nArtista encontrado: [%d] %s (%s)\n\n",
-           cadastroArtistas[pos].idArtista,
-           cadastroArtistas[pos].nomeArtista,
-           cadastroArtistas[pos].paisOrigem);
+	printf("\nArtista encontrado: [%d] %s (%s)\n\n",
+	       cadastroArtistas[pos].idArtista,
+	       cadastroArtistas[pos].nomeArtista,
+	       cadastroArtistas[pos].paisOrigem);
 
-    char nomeTemp[40];
-    printf("Novo nome: ");
-    scanf(" %39[^\n]", nomeTemp);
+	printf("\n-- Digite os novos dados --\n");
 
-    if (strchr(nomeTemp, ';') != NULL) {
-        printf("[ERRO] O nome n√£o pode conter o caractere ';'!\n\n");
-        return;
-    }
+	char nomeTemp[40];
+	printf("Novo nome: ");
+	scanf(" %39[^\n]", nomeTemp);
 
-    int outro = buscarArtistaPorNome(nomeTemp);
-    if (outro != -1 && outro != pos) {
-        printf("[ERRO] J√° existe outro artista com o nome \"%s\"!\n\n", nomeTemp);
-        return;
-    }
-    strcpy(cadastroArtistas[pos].nomeArtista, nomeTemp);
+	if (strchr(nomeTemp, ';') != NULL) {
+		printf("[ERRO] O nome n„o pode conter o caractere ';'!\n\n");
+		return;
+	}
 
-    printf("Novo pa√≠s de origem: ");
-    scanf(" %29[^\n]", cadastroArtistas[pos].paisOrigem);
+	int outro = buscarArtistaPorNome(nomeTemp);
+	if (outro != -1 && outro != pos) {
+		printf("[ERRO] J· existe outro artista com o nome \"%s\"!\n\n", nomeTemp);
+		return;
+	}
+	strcpy(cadastroArtistas[pos].nomeArtista, nomeTemp);
 
-    int qtdNova;
-    do {
-        printf("Nova quantidade de √°lbuns: ");
-        if (!lerInteiroArtista(&qtdNova)) {
-            qtdNova = -1;
-        }
-        if (qtdNova < 0) {
-            printf("[ERRO] Digite um n√∫mero v√°lido (n√£o negativo)!\n");
-        }
-    } while (qtdNova < 0);
-    cadastroArtistas[pos].quantidadeAlbuns = qtdNova;
+	printf("Novo paÌs de origem: ");
+	scanf(" %29[^\n]", cadastroArtistas[pos].paisOrigem);
 
-    int status;
-    printf("Status (1 = Ativo, 0 = Inativo): ");
-    if (lerInteiroArtista(&status) && (status == 0 || status == 1)) {
-        cadastroArtistas[pos].ativo = status;
-    } else {
-        printf("[INFO] Status inv√°lido, mantido o valor anterior.\n");
-    }
+	if (strchr(cadastroArtistas[pos].paisOrigem, ';') != NULL) {
+		printf("[ERRO] O paÌs n„o pode conter o caractere ';'!\n\n");
+		return;
+	}
 
-    salvarArtistasCSV();
-    printf("\n[SUCESSO] Artista atualizado e salvo com sucesso!\n\n");
+	int status;
+	printf("Status (1 = Ativo, 0 = Inativo): ");
+	if (buscarArtistaPorId(status) && (status == 0 || status == 1)) {
+		cadastroArtistas[pos].ativo = status;
+	} else {
+		printf("[INFO] Status inv·lido, mantido o valor anterior.\n");
+	}
+
+	salvarArtistasCSV();
+	printf("\n[SUCESSO] Artista atualizado e salvo com sucesso!\n\n");
 }
 
 // Desativar artista
 void desativarArtista() {
-    int idBusca;
-    printf("\n--- [DESATIVAR ARTISTA] ---\n");
-    printf("Digite o ID do artista: ");
-    if (!lerInteiroArtista(&idBusca)) {
-        printf("[ERRO] ID inv√°lido!\n\n");
-        return;
-    }
+	int idBusca;
+	printf("\n--- [DESATIVAR ARTISTA] ---\n");
+	printf("Digite o ID do artista: ");
+	if (buscarArtistaPorId(idBusca)) {
+		printf("[ERRO] ID inv·lido!\n\n");
+		return;
+	}
 
-    int pos = buscarArtistaPorId(idBusca);
-    if (pos == -1) {
-        printf("\n[ERRO] Artista com ID %d n√£o encontrado!\n\n", idBusca);
-        return;
-    }
+	int pos = buscarArtistaPorId(idBusca);
+	if (pos == -1) {
+		printf("\n[ERRO] Artista com ID %d n„o encontrado!\n\n", idBusca);
+		return;
+	}
 
-    cadastroArtistas[pos].ativo = 0;
-    salvarArtistasCSV();
-    printf("\n[SUCESSO] Artista \"%s\" desativado!\n\n", cadastroArtistas[pos].nomeArtista);
+	if (cadastroArtistas[pos].ativo == 0) {
+		printf("\n[INFO] Artista \"%s\" j· est· inativo.\n\n", cadastroArtistas[pos].nomeArtista);
+		return;
+	}
+
+	cadastroArtistas[pos].ativo = 0;
+	salvarArtistasCSV();
+	printf("\n[SUCESSO] Artista \"%s\" desativado!\n\n", cadastroArtistas[pos].nomeArtista);
 }
 
-/* ---------- Menu do m√≥dulo ---------- */
+// Remover artista (exclui definitivamente do cadastro e do CSV)
+void removerArtista() {
+	int idBusca, i;
+	char confirmacao;
+
+	printf("\n--- [REMOVER ARTISTA] ---\n");
+	printf("Digite o ID do artista: ");
+	if (buscarArtistaPorId(idBusca)) {
+		printf("[ERRO] ID inv·lido!\n\n");
+		return;
+	}
+
+	int pos = buscarArtistaPorId(idBusca);
+	if (pos == -1) {
+		printf("\n[ERRO] Artista com ID %d n„o encontrado!\n\n", idBusca);
+		return;
+	}
+
+	printf("\nArtista encontrado: [%d] %s (%s)\n",
+	       cadastroArtistas[pos].idArtista,
+	       cadastroArtistas[pos].nomeArtista,
+	       cadastroArtistas[pos].paisOrigem);
+	printf("Tem certeza que deseja REMOVER definitivamente? (s/n): ");
+	scanf(" %c", &confirmacao);
+	scanf("%*[^\n]"); // descarta o resto da linha
+
+	if (confirmacao != 's' && confirmacao != 'S') {
+		printf("\n[INFO] RemoÁ„o cancelada.\n\n");
+		return;
+	}
+
+	printf("Removendo: [%d] %s\n", cadastroArtistas[pos].idArtista, cadastroArtistas[pos].nomeArtista);
+
+	// Desloca os artistas seguintes uma posiÁ„o para tr·s
+	for (i = pos; i < totalArtistas - 1; i++) {
+		cadastroArtistas[i] = cadastroArtistas[i + 1];
+	}
+	totalArtistas--;
+
+	salvarArtistasCSV();
+	printf("\n[SUCESSO] Artista removido com sucesso!\n\n");
+}
 
 void moduloArtistas() {
-    int opcaoArtista;
-    setlocale(LC_ALL, "Portuguese");
-    carregarArtistasCSV();
+	int opcaoArtista;
+	setlocale(LC_ALL, "Portuguese");
+	carregarArtistasCSV();
 
-    do {
-        printf("\n--- [M√ìDULO 3: CADASTRO DE ARTISTAS (Alan)] ---\n");
-        printf("1. Cadastrar Novo Artista / Banda\n");
-        printf("2. Consultar / Listar Artistas\n");
-        printf("3. Atualizar Dados do Artista\n");
-        printf("4. Desativar / Remover Artista\n");
-        printf("0. Voltar ao Menu Principal\n");
-        printf("Escolha uma a√ß√£o: ");
+	do {
+		printf("\n--- [M”DULO 3: CADASTRO DE ARTISTAS (Alan)] ---\n");
+		printf("1. Cadastrar Novo Artista / Banda\n");
+		printf("2. Listar Todos os Artistas\n");
+		printf("3. Buscar Artista por Nome (parcial)\n");
+		printf("4. Atualizar Dados do Artista\n");
+		printf("5. Desativar Artista\n");
+		printf("6. Remover Artista\n");
+		printf("0. Voltar ao Menu Principal\n");
+		printf("Escolha uma aÁ„o: ");
+		scanf("%d", &opcaoArtista);
 
-        if (!lerInteiroArtista(&opcaoArtista)) {
-            opcaoArtista = -1; // cai no default
-        }
-
-        switch (opcaoArtista) {
-            case 1:
-                cadastrarArtista();
-                break;
-            case 2:
-                listarArtistas();
-                break;
-            case 3:
-                atualizarArtista();
-                break;
-            case 4:
-                desativarArtista();
-                break;
-            case 0:
-                printf("\nRetornando ao menu principal...\n");
-                break;
-            default:
-                printf("\n[ERRO] Op√ß√£o inv√°lida no M√≥dulo de Artistas!\n");
-        }
-    } while (opcaoArtista != 0);
+		switch (opcaoArtista) {
+			case 1:
+				cadastrarArtista();
+				break;
+			case 2:
+				listarArtistas();
+				break;
+			case 3:
+				buscarArtistaPorNomeParcial();
+				break;
+			case 4:
+				atualizarArtista();
+				break;
+			case 5:
+				desativarArtista();
+				break;
+			case 6:
+				removerArtista();
+				break;
+			case 0:
+				printf("\nRetornando ao menu principal...\n");
+				break;
+			default:
+				printf("\n[ERRO] OpÁ„o inv·lida no MÛdulo de Artistas!\n");
+		}
+	} while (opcaoArtista != 0);
 }
 
 #endif
